@@ -1,0 +1,87 @@
+<html>
+
+<head>
+    
+    <link rel="stylesheet" href="../css/index.css">
+</head>
+<title>
+    Medical Store
+</title>
+
+<body>
+
+    <div class="form" id="form">
+        <div class="row">
+            <button onclick="SignUpPage()">
+                Sign Up
+            </button>
+            <button onclick="SignInPage()">
+                sign in
+            </button>
+        </div>
+        <div class="signup" id="signup">
+
+            <h3>Sign Up </h3>
+            <input class="input" type="text" id="emailID" placeholder="Email"> <br><br>
+            <input class="input" type="password" id="password" placeholder="Password"><br><br>
+            <input class="input" type="password" id="confirmpassword" placeholder="Confirm Password"><br><br>
+
+            <button onclick="newUserCreation()">Sign Up</button>
+        </div>
+
+        <div class="signin" id="signin">
+
+            <h3>Sign In</h3>
+            <input class="input" type="text" id="existingMailid" placeholder="Email"><br><br>
+            <input class="input" type="password" id="existingPassword" placeholder="Password"><br><br>
+            <button onclick="existinguser()" type="button">Sign In</button><br>
+            <br>
+            <br>
+
+
+        </div>
+    </div>
+
+    <div class="afterlogin" id="afterlogin">
+        <div class="row">
+            <button onclick="homePage()">Home</button>
+            <button onclick="renderMedicineTable()">Medicine Details</button>
+            <button>Purchase</button>
+            <button>Cancel</button>
+            <button>Topup</button>
+            <button>Order History</button>
+            <button>Show Balance</button>
+        </div>
+    </div>
+
+    <div class="home" id="home">
+
+    </div>
+    <!-- Medicine details -->
+    <div class="medicineDetails" id="medicineDetails">
+        <button onclick="showaddMedicine()">Add</button>
+        <div class="AddMedicine" id="AddMedicine">
+            <input type="text" name="MedcineName" id="MedcineName" placeholder="Enter the MedcineName"><br><br>
+            <input type="number" name="Price" id="Price" placeholder="Enter the Price"> <br><br>
+            <input type="number" name="Quantity" id="Quantity" placeholder="Enter the Quantity"><br><br>
+            <input type="date" name="ExpiryDate" id="ExpiryDate" placeholder="Enter the ExpiryDate"> <br><br>
+            <button>Submit</button>
+        </div>
+
+        <table id="medicineTable">
+            <tr>
+                <th>Medicine Name</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Expiry Date</th>
+                <th>Actions</th>
+            </tr>
+        </table>
+
+
+    </div>
+    <!-- Medicine details ends -->
+</body>
+<script src="../script/index.js"></script>
+
+</html>
