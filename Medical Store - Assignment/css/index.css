@@ -46,3 +46,32 @@
 .AddMedicine{
     display: none;
 }
+.EditMedicine{
+    display: none;
+}
+
+.purchase{
+    display: none;
+}
+.purchaseDetails{
+    display: none;
+}
+
+.cancelOrder{
+    display: none;
+
+}
+.showBalance{
+    display: none;
+}
+
+.orderHistory{
+    display: none;
+}
+.topup{
+    display: none;
+}
+table,th,td{
+    border: 1px solid black;
+    
+}

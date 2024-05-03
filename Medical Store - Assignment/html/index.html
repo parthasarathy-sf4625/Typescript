@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    
+
     <link rel="stylesheet" href="../css/index.css">
 </head>
 <title>
@@ -16,13 +16,15 @@
                 Sign Up
             </button>
             <button onclick="SignInPage()">
-                sign in
+                Sign in
             </button>
         </div>
         <div class="signup" id="signup">
 
             <h3>Sign Up </h3>
+            <input class="input" type="text" id="name" placeholder="Name"> <br><br>
             <input class="input" type="text" id="emailID" placeholder="Email"> <br><br>
+            <input class="input" type="text" id="phone" placeholder="Phone"><br><br>
             <input class="input" type="password" id="password" placeholder="Password"><br><br>
             <input class="input" type="password" id="confirmpassword" placeholder="Confirm Password"><br><br>
 
@@ -44,13 +46,13 @@
 
     <div class="afterlogin" id="afterlogin">
         <div class="row">
-            <button onclick="homePage()">Home</button>
+            <button class="button" onclick="homePage()">Home</button>
             <button onclick="renderMedicineTable()">Medicine Details</button>
-            <button>Purchase</button>
-            <button>Cancel</button>
-            <button>Topup</button>
-            <button>Order History</button>
-            <button>Show Balance</button>
+            <button onclick="purchaseMedicine()">Purchase </button>
+            <button onclick="showcancelOrder()">Cancel</button>
+            <button onclick="showtopup()">Topup </button>
+            <button onclick="showOrderHistory()">Order History</button>
+            <button onclick="showBalance()">Show Balance</button>
         </div>
     </div>
 
@@ -61,14 +63,27 @@
     <div class="medicineDetails" id="medicineDetails">
         <button onclick="showaddMedicine()">Add</button>
         <div class="AddMedicine" id="AddMedicine">
-            <input type="text" name="MedcineName" id="MedcineName" placeholder="Enter the MedcineName"><br><br>
-            <input type="number" name="Price" id="Price" placeholder="Enter the Price"> <br><br>
-            <input type="number" name="Quantity" id="Quantity" placeholder="Enter the Quantity"><br><br>
-            <input type="date" name="ExpiryDate" id="ExpiryDate" placeholder="Enter the ExpiryDate"> <br><br>
-            <button>Submit</button>
+            <form id="AddMedicineForm">
+                <input type="text" name="MedcineName" id="MedcineName" placeholder="Enter the MedcineName"><br><br>
+                <input type="number" name="Price" id="Price" placeholder="Enter the Price"> <br><br>
+                <input type="number" name="Quantity" id="Quantity" placeholder="Enter the Quantity"><br><br>
+                <input type="date" name="ExpiryDate" id="ExpiryDate" placeholder="Enter the ExpiryDate"> <br><br>
+                <button onclick="return addMedicine()">Submit</button>
+            </form>
+
         </div>
 
-        <table id="medicineTable">
+        <div class="EditMedicine" id="EditMedicine">
+            <form id="EditMedicineForm">
+                <input type="text" name="MedcineName" id="EditMedcineName" placeholder="Enter the MedcineName"><br><br>
+                <input type="number" name="Price" id="EditPrice" placeholder="Enter the Price"> <br><br>
+                <input type="number" name="Quantity" id="EditQuantity" placeholder="Enter the Quantity"><br><br>
+                <input type="date" name="ExpiryDate" id="EditExpiryDate" placeholder="Enter the ExpiryDate"> <br><br>
+            </form>
+
+        </div>
+
+        <table>
             <tr>
                 <th>Medicine Name</th>
                 <th>Price</th>
@@ -76,11 +91,81 @@
                 <th>Expiry Date</th>
                 <th>Actions</th>
             </tr>
+            <tbody id="medicineTable">
+
+            </tbody>
         </table>
 
 
     </div>
     <!-- Medicine details ends -->
+
+    <!-- Purchace -->
+    <div class="purchase" id="purchase">
+        <table>
+            <tr>
+                <th>Medicine Name</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Expiry Date</th>
+                <th>Actions</th>
+            </tr>
+            <tbody id="purchaseTable">
+
+            </tbody>
+        </table>
+        <div class="purchaseDetails" id="purchaseDetails">
+            <form id="purchaseform">
+                <input type="text" id="Purchacequantity" placeholder="Enter the Quantity of Purchase"><br>
+                <button onclick="return buyMedicine('${item.MedicineID}')">Confirm</button><br>
+            </form>
+        </div>
+    </div>
+
+    <!-- Cancel order -->
+    <div class="cancelOrder" id="cancelOrder">
+        <table>
+            <tr>
+                <th>Order ID</th>
+                <th>Medicine Name</th>
+                <th>Quantity</th>
+                <th>Order Date</th>
+                <th>Order Status</th>
+                <th>Actions</th>
+            </tr>
+            <tbody id="cancelorderDetails">
+
+            </tbody>
+        </table>
+    </div>
+    <!-- Topup -->
+    <div class="topup" id="topup">
+        <form id="topupform">
+            <input type="number" name="amount" id="amount" placeholder="Enter the amount to Topup">
+            <button onclick="return topup()">Topup</button>
+        </form>
+
+    </div>
+
+    <!-- Order History-->
+    <div class="orderHistory" id="orderHistory">
+        <table>
+            <tr>
+                <th>Order ID</th>
+                <th>Medicine Name</th>
+                <th>Quantity</th>
+                <th>Order Date</th>
+                <th>Order Status</th>
+            </tr>
+            <tbody id="orderDetails">
+
+            </tbody>
+        </table>
+    </div>
+    <!-- Show Balance -->
+    <div class="showBalance" id="showBalance">
+
+    </div>
 </body>
 <script src="../script/index.js"></script>
 
