@@ -79,10 +79,10 @@ let SignUpPage = () => {
 };
 let newUserCreation = () => {
     let name = document.getElementById("name");
-    let emailID = document.getElementById("name");
+    let emailID = document.getElementById("emailID");
     let phone = document.getElementById("phone");
-    let password = document.getElementById("name");
-    let confirmPassword = document.getElementById("name");
+    let password = document.getElementById("password");
+    let confirmPassword = document.getElementById("confirmpassword");
     UserList.push(new UserInfo(name.value, emailID.value, phone.value, password.value));
     alert("Registeration Sucessfull");
     SignInPage();

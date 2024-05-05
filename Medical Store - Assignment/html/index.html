@@ -12,10 +12,10 @@
 
     <div class="form" id="form">
         <div class="row">
-            <button onclick="SignUpPage()">
+            <button class="rowbuttons" onclick="SignUpPage()">
                 Sign Up
             </button>
-            <button onclick="SignInPage()">
+            <button class="rowbuttons" onclick="SignInPage()">
                 Sign in
             </button>
         </div>
@@ -28,7 +28,7 @@
             <input class="input" type="password" id="password" placeholder="Password"><br><br>
             <input class="input" type="password" id="confirmpassword" placeholder="Confirm Password"><br><br>
 
-            <button onclick="newUserCreation()">Sign Up</button>
+            <button class="signinbutton" onclick="newUserCreation()">Sign Up</button>
         </div>
 
         <div class="signin" id="signin">
@@ -36,7 +36,7 @@
             <h3>Sign In</h3>
             <input class="input" type="text" id="existingMailid" placeholder="Email"><br><br>
             <input class="input" type="password" id="existingPassword" placeholder="Password"><br><br>
-            <button onclick="existinguser()" type="button">Sign In</button><br>
+            <button class="signinbutton" onclick="existinguser()" type="button">Sign In</button><br>
             <br>
             <br>
 

@@ -141,10 +141,10 @@ let SignUpPage = () => {
 
 let newUserCreation = () => {
     let name = document.getElementById("name") as HTMLInputElement;
-    let emailID = document.getElementById("name") as HTMLInputElement;
+    let emailID = document.getElementById("emailID") as HTMLInputElement;
     let phone = document.getElementById("phone") as HTMLInputElement;
-    let password = document.getElementById("name") as HTMLInputElement;
-    let confirmPassword = document.getElementById("name") as HTMLInputElement;
+    let password = document.getElementById("password") as HTMLInputElement;
+    let confirmPassword = document.getElementById("confirmpassword") as HTMLInputElement;
 
     UserList.push(new UserInfo(name.value, emailID.value, phone.value, password.value));
     alert("Registeration Sucessfull");
