@@ -1,0 +1,7 @@
+D:\API-MetpoApplication\obj\Debug\net7.0\API-MetpoApplication.csproj.AssemblyReference.cache
+D:\API-MetpoApplication\obj\Debug\net7.0\API-MetpoApplication.GeneratedMSBuildEditorConfig.editorconfig
+D:\API-MetpoApplication\obj\Debug\net7.0\API-MetpoApplication.AssemblyInfoInputs.cache
+D:\API-MetpoApplication\obj\Debug\net7.0\API-MetpoApplication.AssemblyInfo.cs
+D:\API-MetpoApplication\obj\Debug\net7.0\API-MetpoApplication.csproj.CoreCompileInputs.cache
+D:\API-MetpoApplication\obj\Debug\net7.0\API-MetpoApplication.MvcApplicationPartsAssemblyInfo.cs
+D:\API-MetpoApplication\obj\Debug\net7.0\API-MetpoApplication.MvcApplicationPartsAssemblyInfo.cache

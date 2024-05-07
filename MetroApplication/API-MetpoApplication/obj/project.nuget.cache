@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "dgSpecHash": "Ap/VdFcnjeBCuMVhODqv1My8ojSMZGcDiZWRZi+HmATVb6SxCGoNozWBafxKYQ7s45/1Htm59iD88T0Btm4HLA==",
+  "success": true,
+  "projectFilePath": "D:\\API-MetpoApplication\\API-MetpoApplication.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Parthasarathyvenkidu\\.nuget\\packages\\microsoft.aspnetcore.openapi\\7.0.18\\microsoft.aspnetcore.openapi.7.0.18.nupkg.sha512",
+    "C:\\Users\\Parthasarathyvenkidu\\.nuget\\packages\\microsoft.extensions.apidescription.server\\6.0.5\\microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
+    "C:\\Users\\Parthasarathyvenkidu\\.nuget\\packages\\microsoft.openapi\\1.4.3\\microsoft.openapi.1.4.3.nupkg.sha512",
+    "C:\\Users\\Parthasarathyvenkidu\\.nuget\\packages\\swashbuckle.aspnetcore\\6.5.0\\swashbuckle.aspnetcore.6.5.0.nupkg.sha512",
+    "C:\\Users\\Parthasarathyvenkidu\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.5.0\\swashbuckle.aspnetcore.swagger.6.5.0.nupkg.sha512",
+    "C:\\Users\\Parthasarathyvenkidu\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.5.0\\swashbuckle.aspnetcore.swaggergen.6.5.0.nupkg.sha512",
+    "C:\\Users\\Parthasarathyvenkidu\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\6.5.0\\swashbuckle.aspnetcore.swaggerui.6.5.0.nupkg.sha512"
+  ],
+  "logs": []
+}
