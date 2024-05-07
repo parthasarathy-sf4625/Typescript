@@ -1,7 +1,13 @@
 "use strict";
-let UserIdAutoIncrement = 1000;
-let MedicineIdAutoIncrement = 0;
-let OrderIdAutoIncrement = 0;
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 let home = document.getElementById("home");
 let medicineTable = document.getElementById("medicineDetails");
 let medicinetableBody = document.getElementById("medicineTable");
@@ -14,57 +20,7 @@ let topupBalance = document.getElementById("topup");
 let currentUser;
 let selectedMedicine;
 let selectedOrder;
-//User Info Class
-class UserInfo {
-    constructor(paramName, paramuserEmail, paramuserPassword, paramPhone) {
-        UserIdAutoIncrement++;
-        this.userID = "UID" + UserIdAutoIncrement;
-        this.userName = paramName;
-        this.userEmail = paramuserEmail;
-        this.userPassword = paramuserPassword;
-        this.phone = paramPhone;
-        this.balance = 0;
-    }
-}
-//User Info Class Ends
-//
-//Medicine Class 
-class MedicineInfo {
-    constructor(paramMedicineName, paramMedicinePrice, paramQuantity, paramExpireyDate) {
-        MedicineIdAutoIncrement++;
-        this.MedicineID = "MID" + MedicineIdAutoIncrement;
-        this.MedicineName = paramMedicineName;
-        this.MedicinePrice = paramMedicinePrice;
-        this.Quantity = paramQuantity;
-        this.ExpireyDate = paramExpireyDate;
-    }
-}
-//Medicine Class  ends
-//Order Details
-class OrderDetails {
-    constructor(paramMedicineID, paramUserID, paramMedicineName, paramQuantity, paramOrderDate, paramTotalPrice, paramOrderStatus) {
-        OrderIdAutoIncrement++;
-        this.OrderID = "OID " + OrderIdAutoIncrement;
-        this.MedicineID = paramMedicineID;
-        this.UserID = paramUserID;
-        this.MedicineName = paramMedicineName;
-        this.Quantity = paramQuantity;
-        this.OrderDate = paramOrderDate;
-        this.TotalPrice = paramTotalPrice;
-        this.OrderStatus = paramOrderStatus;
-    }
-}
 //Adding Default Data and creating list
-let MedicineList = [];
-MedicineList.push(new MedicineInfo("Paracetomol", 5, 50, new Date(2024, 5, 29)));
-MedicineList.push(new MedicineInfo("Colpal", 5, 60, new Date(2024, 5, 29)));
-MedicineList.push(new MedicineInfo("Stepsil", 5, 70, new Date(2024, 5, 29)));
-MedicineList.push(new MedicineInfo("Iodex", 5, 80, new Date(2024, 3, 29)));
-MedicineList.push(new MedicineInfo("Acetherol", 5, 100, new Date(2024, 5, 29)));
-let UserList = [];
-UserList.push(new UserInfo("Kal el", "manofsteel", "krypton", "9876543210"));
-UserList.push(new UserInfo("Bruce Wayne", "darkknight", "thedarkknight", "7574893947"));
-let OrderList = [];
 let SignInPage = () => {
     let signinpage = document.getElementById("signin");
     let signuppage = document.getElementById("signup");
@@ -77,36 +33,86 @@ let SignUpPage = () => {
     signinpage.style.display = "none";
     signuppage.style.display = "block";
 };
+function addUser(user) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const response = yield fetch('http://localhost:5151/api/UserInfo', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(user)
+        });
+        if (!response.ok) {
+            throw new Error('Failed to add User');
+        }
+    });
+}
+function updateUser(id, user) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const response = yield fetch(`http://localhost:5151/api/UserInfo/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(user)
+        });
+        if (!response.ok) {
+            throw new Error('Failed to update User');
+        }
+    });
+}
+function fetchUsers() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const apiurl = 'http://localhost:5151/api/UserInfo';
+        const response = yield fetch(apiurl);
+        if (!response.ok) {
+            throw new Error('Failed to fetch Users');
+        }
+        return yield response.json();
+    });
+}
 let newUserCreation = () => {
     let name = document.getElementById("name");
     let emailID = document.getElementById("emailID");
     let phone = document.getElementById("phone");
     let password = document.getElementById("password");
     let confirmPassword = document.getElementById("confirmpassword");
-    UserList.push(new UserInfo(name.value, emailID.value, phone.value, password.value));
+    //UserList.push(new UserInfo(name.value, emailID.value, phone.value, password.value));
+    const user = {
+        userid: 1,
+        userName: name.value,
+        userEmail: emailID.value,
+        phone: phone.value,
+        userPassword: password.value,
+        balance: 0
+    };
+    addUser(user);
     alert("Registeration Sucessfull");
     SignInPage();
 };
-let existinguser = () => {
-    let mail = document.getElementById("existingMailid");
-    let password = document.getElementById("existingPassword");
-    let validuser = false;
-    UserList.forEach(user => {
-        if (user.userEmail == mail.value && user.userPassword == password.value) {
-            validuser = true;
-            currentUser = user;
-            let form = document.getElementById("form");
-            let afterlogin = document.getElementById("afterlogin");
-            form.style.display = "none";
-            afterlogin.style.display = "block";
-            homePage();
-            return false;
+function existinguser() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const UserList = yield fetchUsers();
+        let mail = document.getElementById("existingMailid");
+        let password = document.getElementById("existingPassword");
+        let validuser = false;
+        UserList.forEach(user => {
+            if (user.userEmail == mail.value && user.userPassword == password.value) {
+                validuser = true;
+                currentUser = user;
+                let form = document.getElementById("form");
+                let afterlogin = document.getElementById("afterlogin");
+                form.style.display = "none";
+                afterlogin.style.display = "block";
+                homePage();
+                return false;
+            }
+        });
+        if (!validuser) {
+            alert("Invalid user Name or Password");
         }
     });
-    if (!validuser) {
-        alert("Invalid user Name or Password");
-    }
-};
+}
 let homePage = () => {
     home.style.display = "block";
     medicineTable.style.display = "none";
@@ -117,43 +123,57 @@ let homePage = () => {
     home.innerHTML = "Welcome " + currentUser.userName;
 };
 //Show Medicine List
-let renderMedicineTable = () => {
-    home.style.display = "none";
-    medicineTable.style.display = "block";
-    purchaseTable.style.display = "none";
-    showuserBalance.style.display = "none";
-    topupBalance.style.display = "none";
-    orderHistory.style.display = "none";
-    cancel.style.display = "none";
-    let iterate = 0;
-    medicinetableBody.innerHTML = "";
-    MedicineList.forEach((item) => {
-        if (item.ExpireyDate > new Date()) {
-            if (iterate++ == 0) {
-                medicinetableBody.innerHTML = `<tr>
-                    <td>${item.MedicineName}</td>
-                    <td>${item.MedicinePrice}</td>
-                    <td>${item.Quantity}</td>
-                    <td>${item.ExpireyDate.toLocaleDateString()}</td>
-                    <td><button onclick = "return showeditMedicine('${item.MedicineID}')" >Edit</button>
-                    <button onclick = "return deleteMedicine('${item.MedicineID}')" >Delete</button>
+function fetchMedicines() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const apiurl = 'http://localhost:5151/api/MedicineInfo';
+        const response = yield fetch(apiurl);
+        if (!response.ok) {
+            throw new Error('Failed to fetch Medicine');
+        }
+        return yield response.json();
+    });
+}
+function renderMedicineTable() {
+    return __awaiter(this, void 0, void 0, function* () {
+        home.style.display = "none";
+        medicineTable.style.display = "block";
+        purchaseTable.style.display = "none";
+        showuserBalance.style.display = "none";
+        topupBalance.style.display = "none";
+        orderHistory.style.display = "none";
+        cancel.style.display = "none";
+        const MedicineList = yield fetchMedicines();
+        let iterate = 0;
+        medicinetableBody.innerHTML = "";
+        MedicineList.forEach((item) => {
+            if (new Date(item.expireyDate) > new Date()) {
+                if (iterate++ == 0) {
+                    medicinetableBody.innerHTML = `<tr>
+                    <td>${item.medicineName}</td>
+                    <td>${item.medicinePrice}</td>
+                    <td>${item.quantity}</td>
+                    <td>${item.expireyDate.split('T')[0].split('-').reverse().join('/')}</td>
+                    <td><button onclick = "return showeditMedicine('${item.medicineid}')" >Edit</button>
+                    <button onclick = "return deleteMedicine('${item.medicineid}')" >Delete</button>
                     </td>
                     </tr>`;
-            }
-            else {
-                medicinetableBody.innerHTML += `<tr>
-                <td>${item.MedicineName}</td>
-                <td>${item.MedicinePrice}</td>
-                <td>${item.Quantity}</td>
-                <td>${item.ExpireyDate.toLocaleDateString()}</td>
-                <td><button onclick = "return showeditMedicine('${item.MedicineID}')" >Edit</button>
-                <button onclick = "return deleteMedicine('${item.MedicineID}')" >Delete</button>
+                }
+                else {
+                    medicinetableBody.innerHTML += `<tr>
+                <td>${item.medicineName}</td>
+                <td>${item.medicinePrice}</td>
+                <td>${item.quantity}</td>
+                <td>${item.expireyDate.split('T')[0].split('-').reverse().join('/')}</td>
+                <td><button onclick = "showeditMedicine(${item.medicineid})" >Edit</button>
+                <button onclick = "deleteMedicine(${item.medicineid})" >Delete</button>
                 </td>
                 </tr>`;
+                }
             }
-        }
+        });
     });
-};
+}
+;
 //Show Add Medicine
 let showaddMedicine = () => {
     let getMedicine = document.getElementById("AddMedicine");
@@ -161,169 +181,253 @@ let showaddMedicine = () => {
     let editMedicine = document.getElementById("EditMedicine");
     editMedicine.style.display = "none";
 };
-//Show Add Medicine
+//Add Medicine 
+function addMedicineAPI(medicine) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const response = yield fetch('http://localhost:5151/api/MedicineInfo', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(medicine)
+        });
+        if (!response.ok) {
+            throw new Error('Failed to add Medicine');
+        }
+        renderMedicineTable();
+    });
+}
 let addMedicine = () => {
     let getMedicine = document.getElementById("AddMedicine");
     getMedicine.style.display = "block";
-    let MedicineName = document.getElementById("MedcineName");
-    let Price = document.getElementById("Price");
-    let Quantity = document.getElementById("Quantity");
-    let ExpireyDate = document.getElementById("ExpiryDate");
-    MedicineList.push(new MedicineInfo(MedicineName.value, parseInt(Price.value), parseInt(Quantity.value), new Date(ExpireyDate.value)));
-    renderMedicineTable();
+    let name = document.getElementById("MedcineName");
+    let price = document.getElementById("Price");
+    let quantity = document.getElementById("quantity");
+    let date = document.getElementById("ExpiryDate");
+    // MedicineList.push(new MedicineInfo(medicineName.value, parseInt(Price.value), parseInt(quantity.value), new Date(expireyDate.value)));
+    const medicine = {
+        medicineid: 1,
+        medicineName: name.value,
+        medicinePrice: parseInt(price.value),
+        quantity: parseInt(quantity.value),
+        expireyDate: date.value,
+    };
+    addMedicineAPI(medicine);
     let form = document.getElementById("AddMedicineForm");
     form.reset();
     getMedicine.style.display = "none";
     return false;
 };
-let showeditMedicine = (id) => {
-    let getMedicine = document.getElementById("AddMedicine");
-    getMedicine.style.display = "none";
-    MedicineList.forEach((medicine) => {
-        if (medicine.MedicineID == id) {
-            let editMedicine = document.getElementById("EditMedicine");
-            editMedicine.style.display = "block";
-            editMedicine.innerHTML += `<button onclick="return editMedicine('${medicine.MedicineID}')">Submit</button>`;
-            let MedicineName = document.getElementById("EditMedcineName");
-            let Price = document.getElementById("EditPrice");
-            let Quantity = document.getElementById("EditQuantity");
-            let ExpireyDate = document.getElementById("ExpiryDate");
-            var date = medicine.ExpireyDate.toISOString();
-            MedicineName.value = medicine.MedicineName;
-            Price.value = medicine.MedicinePrice.toString();
-            Quantity.value = medicine.Quantity.toString();
-            ExpireyDate.value = date.substring(0, 10);
-            return false;
-        }
+function showeditMedicine(id) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let getMedicine = document.getElementById("AddMedicine");
+        getMedicine.style.display = "none";
+        const MedicineList = yield fetchMedicines();
+        MedicineList.forEach((medicine) => {
+            if (medicine.medicineid == id) {
+                let editMedicine = document.getElementById("EditMedicine");
+                editMedicine.style.display = "block";
+                editMedicine.innerHTML += `<button onclick="return editMedicine('${medicine.medicineid}')">Submit</button>`;
+                let medicineName = document.getElementById("EditMedcineName");
+                let Price = document.getElementById("EditPrice");
+                let quantity = document.getElementById("Editquantity");
+                let expireyDate = document.getElementById("ExpiryDate");
+                //var date = medicine.expireyDate.toISOString();
+                medicineName.value = medicine.medicineName;
+                Price.value = medicine.medicinePrice.toString();
+                quantity.value = medicine.quantity.toString();
+                //expireyDate.value = date.substring(0, 10);
+            }
+        });
     });
-};
-let editMedicine = (id) => {
-    let MedicineName = document.getElementById("EditMedcineName");
-    let Price = document.getElementById("EditPrice");
-    let Quantity = document.getElementById("EditQuantity");
-    let ExpireyDate = document.getElementById("ExpiryDate");
-    MedicineList.forEach(medicine => {
-        if (medicine.MedicineID == id) {
-            medicine.MedicineName = MedicineName.value;
-            medicine.MedicinePrice = parseInt(Price.value);
-            var date;
-            medicine.Quantity = parseInt(Quantity.value);
-            medicine.ExpireyDate = new Date(ExpireyDate.value);
+}
+function updateMedicine(id, medicine) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const response = yield fetch(`http://localhost:5151/api/MedicineInfo/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(medicine)
+        });
+        if (!response.ok) {
+            throw new Error('Failed to update contact');
         }
+        renderMedicineTable();
     });
-    let editform = document.getElementById("EditMedicineForm");
-    editform.reset();
-    renderMedicineTable();
-    return false;
-};
-let deleteMedicine = (id) => {
-    MedicineList = MedicineList.filter((item) => item.MedicineID !== id);
-    console.log(MedicineList.length);
-    renderMedicineTable();
-};
-let purchaseMedicine = () => {
-    home.style.display = "none";
-    medicineTable.style.display = "none";
-    purchaseTable.style.display = "block";
-    showuserBalance.style.display = "none";
-    topupBalance.style.display = "none";
-    orderHistory.style.display = "none";
-    cancel.style.display = "none";
-    let iterate = 0;
-    purchasetableBody.innerHTML = "";
-    MedicineList.forEach((item) => {
-        if (item.ExpireyDate > new Date()) {
-            if (iterate++ == 0) {
-                purchasetableBody.innerHTML = `<tr>
-                    <td>${item.MedicineName}</td>
-                    <td>${item.MedicinePrice}</td>
-                    <td>${item.Quantity}</td>
-                    <td>${item.ExpireyDate.toLocaleDateString()}</td>
-                    <td><button onclick = "return showBuyMedicine('${item.MedicineID}')" >Buy</button><br>
+}
+function editMedicine(id) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let medicineName = document.getElementById("EditMedcineName");
+        let Price = document.getElementById("EditPrice");
+        let quantity = document.getElementById("Editquantity");
+        let expireyDate = document.getElementById("ExpiryDate");
+        const MedicineList = yield fetchMedicines();
+        const medicine = {
+            medicineid: selectedMedicine.medicineid,
+            medicineName: medicineName.value,
+            quantity: parseInt(quantity.value),
+            medicinePrice: parseInt(Price.value),
+            expireyDate: expireyDate.value
+        };
+        let editform = document.getElementById("EditMedicineForm");
+        editform.reset();
+        updateMedicine(selectedMedicine.medicineid, medicine);
+    });
+}
+function deleteMedcine(id) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const response = yield fetch(`http://localhost:5151/api/MedicineInfo/${id}`, {
+            method: 'DELETE'
+        });
+        if (!response.ok) {
+            throw new Error('Failed to delete Medicine');
+        }
+        renderMedicineTable();
+    });
+}
+function purchaseMedicine() {
+    return __awaiter(this, void 0, void 0, function* () {
+        home.style.display = "none";
+        medicineTable.style.display = "none";
+        purchaseTable.style.display = "block";
+        showuserBalance.style.display = "none";
+        topupBalance.style.display = "none";
+        orderHistory.style.display = "none";
+        cancel.style.display = "none";
+        const MedicineList = yield fetchMedicines();
+        let iterate = 0;
+        purchasetableBody.innerHTML = "";
+        MedicineList.forEach((item) => {
+            if (new Date(item.expireyDate) > new Date()) {
+                if (iterate++ == 0) {
+                    purchasetableBody.innerHTML = `<tr>
+                    <td>${item.medicineName}</td>
+                    <td>${item.medicinePrice}</td>
+                    <td>${item.quantity}</td>
+                    <td>${item.expireyDate.split('T')[0].split('-').reverse().join('/')}</td>
+                    <td><button onclick = "return showBuyMedicine('${item.medicineid}')" >Buy</button><br>
                     
                     </td>
                     </tr>`;
-            }
-            else {
-                purchasetableBody.innerHTML += `<tr>
-                <td>${item.MedicineName}</td>
-                <td>${item.MedicinePrice}</td>
-                <td>${item.Quantity}</td>
-                <td>${item.ExpireyDate.toLocaleDateString()}</td>
-                <td><button onclick = "return showBuyMedicine('${item.MedicineID}')" >Buy</button>
+                }
+                else {
+                    purchasetableBody.innerHTML += `<tr>
+                <td>${item.medicineName}</td>
+                <td>${item.medicinePrice}</td>
+                <td>${item.quantity}</td>
+                <td>${item.expireyDate.split('T')[0].split('-').reverse().join('/')}</td>
+                <td><button onclick = "return showBuyMedicine('${item.medicineid}')" >Buy</button>
                 </td>
                 </tr>`;
-            }
-        }
-    });
-};
-let showBuyMedicine = (id) => {
-    let buyMedicineform = document.getElementById("purchaseDetails");
-    buyMedicineform.style.display = "block";
-    MedicineList.forEach(medicine => {
-        if (medicine.MedicineID == id) {
-            selectedMedicine = medicine;
-        }
-    });
-};
-let buyMedicine = () => {
-    let buyform = document.getElementById("purchaseform");
-    let buyQuantity = document.getElementById("Purchacequantity");
-    if (parseInt(buyQuantity.value) > selectedMedicine.Quantity) {
-        alert("Sorry the Selected Quantity is unavailable");
-    }
-    else {
-        let TotalPrice = parseInt(buyQuantity.value) * selectedMedicine.MedicinePrice;
-        if (TotalPrice > currentUser.balance) {
-            alert("Insufficaint Balance . ...Please Recharge");
-        }
-        else {
-            selectedMedicine.Quantity -= parseInt(buyQuantity.value);
-            currentUser.balance -= TotalPrice;
-            OrderList.push(new OrderDetails(selectedMedicine.MedicineID, currentUser.userID, selectedMedicine.MedicineName, parseInt(buyQuantity.value), new Date(), TotalPrice, "Ordered"));
-            alert("Order Placed Sucessfully");
-            purchaseMedicine();
-        }
-    }
-    buyform.reset();
-    return false;
-};
-let showcancelOrder = () => {
-    home.style.display = "none";
-    medicineTable.style.display = "none";
-    purchaseTable.style.display = "none";
-    showuserBalance.style.display = "none";
-    topupBalance.style.display = "none";
-    orderHistory.style.display = "none";
-    cancel.style.display = "block";
-    let orderDetails = document.getElementById("cancelorderDetails");
-    orderDetails.innerHTML = "";
-    OrderList.forEach(order => {
-        if (order.UserID == currentUser.userID && order.OrderStatus == "Ordered") {
-            orderDetails.innerHTML += `<tr><td>${order.OrderID}</td>
-                <td>${order.MedicineName}</td>
-                <td>${order.Quantity}</td> 
-                <td>${order.OrderDate.toLocaleDateString()}</td>
-                <td>${order.OrderStatus}</td>
-                <td><button onclick = "return cancelOrder('${order.OrderID}')" >Cancel</button><br>`;
-        }
-    });
-};
-let cancelOrder = (id) => {
-    OrderList.forEach(order => {
-        if (order.OrderID == id) {
-            order.OrderStatus = "Cancelled";
-            currentUser.balance += order.TotalPrice;
-            MedicineList.forEach(medicine => {
-                if (medicine.MedicineID == order.MedicineID) {
-                    medicine.Quantity += order.Quantity;
-                    alert("Sucessfully cancelled");
                 }
-            });
+            }
+        });
+    });
+}
+function showBuyMedicine(id) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let buyMedicineform = document.getElementById("purchaseDetails");
+        buyMedicineform.style.display = "block";
+        const MedicineList = yield fetchMedicines();
+        MedicineList.forEach(medicine => {
+            if (medicine.medicineid == id) {
+                selectedMedicine = medicine;
+            }
+        });
+        return false;
+    });
+}
+//Add order
+function fetchOrders() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const apiurl = 'http://localhost:5151/api/OrderDetails';
+        const response = yield fetch(apiurl);
+        if (!response.ok) {
+            throw new Error('Failed to fetch Orders');
+        }
+        return yield response.json();
+    });
+}
+function addOrder(order) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const response = yield fetch('http://localhost:5151/api/OrderDetails', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(order)
+        });
+        if (!response.ok) {
+            throw new Error('Failed to add Order');
         }
     });
-    showcancelOrder();
-};
+}
+// let buyMedicine = () => {
+//     let buyform = document.getElementById("purchaseform") as HTMLFormElement;
+//     let buyquantity = document.getElementById("Purchacequantity") as HTMLInputElement;
+//     if (parseInt(buyquantity.value) > selectedMedicine.quantity) {
+//         alert("Sorry the Selected quantity is unavailable");
+//     }
+//     else {
+//         let totalPrice = parseInt(buyquantity.value) * selectedMedicine.medicinePrice;
+//         if (totalPrice > currentUser.balance) {
+//             alert("Insufficaint Balance . ...Please Recharge");
+//         }
+//         else {
+//             selectedMedicine.quantity -= parseInt(buyquantity.value);
+//             currentUser.balance -= totalPrice;
+//             OrderList.push(new OrderDetails(selectedMedicine.medicineID, currentUser.userID, selectedMedicine.medicineName, parseInt(buyquantity.value), new Date(), totalPrice, "Ordered"));
+//             alert("Order Placed Sucessfully");
+//             purchaseMedicine();
+//         }
+//     }
+//     buyform.reset();
+//     return false;
+// }
+function showcancelOrder() {
+    return __awaiter(this, void 0, void 0, function* () {
+        home.style.display = "none";
+        medicineTable.style.display = "none";
+        purchaseTable.style.display = "none";
+        showuserBalance.style.display = "none";
+        topupBalance.style.display = "none";
+        orderHistory.style.display = "none";
+        cancel.style.display = "block";
+        const OrderList = yield fetchOrders();
+        let orderDetails = document.getElementById("cancelorderDetails");
+        orderDetails.innerHTML = "";
+        OrderList.forEach(order => {
+            if (order.userid == currentUser.userid && order.orderStatus == "Ordered") {
+                orderDetails.innerHTML += `<tr><td>${order.orderid}</td>
+                <td>${order.medicineName}</td>
+                <td>${order.quantity}</td> 
+                <td>${order.orderDate.split('T')[0].split('-').reverse().join('/')}</td>
+                <td>${order.orderStatus}</td>
+                <td><button onclick = "return cancelOrder('${order.orderid}')" >Cancel</button><br>`;
+            }
+        });
+    });
+}
+function cancelOrder(id) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const MedicineList = yield fetchMedicines();
+        const OrderList = yield fetchOrders();
+        OrderList.forEach(order => {
+            if (order.orderid == id) {
+                order.orderStatus = "Cancelled";
+                currentUser.balance += order.totalPrice;
+                MedicineList.forEach(medicine => {
+                    if (medicine.medicineid == order.medicineid) {
+                        medicine.quantity += order.quantity;
+                        alert("Sucessfully cancelled");
+                    }
+                });
+            }
+        });
+        showcancelOrder();
+    });
+}
 let showtopup = () => {
     home.style.display = "none";
     medicineTable.style.display = "none";
@@ -337,31 +441,42 @@ let showtopup = () => {
 };
 let topup = () => {
     let amount = document.getElementById("amount");
-    currentUser.balance += parseInt(amount.value);
     let topupform = document.getElementById("topupform");
     topupform.reset();
+    const user = {
+        userid: currentUser.userid,
+        userName: currentUser.userName,
+        userEmail: currentUser.userEmail,
+        userPassword: currentUser.userPassword,
+        phone: currentUser.phone,
+        balance: currentUser.balance += parseInt(amount.value)
+    };
+    updateUser(currentUser.userid, user);
     return false;
 };
-let showOrderHistory = () => {
-    home.style.display = "none";
-    medicineTable.style.display = "none";
-    purchaseTable.style.display = "none";
-    showuserBalance.style.display = "none";
-    topupBalance.style.display = "none";
-    orderHistory.style.display = "block";
-    cancel.style.display = "none";
-    let orderDetails = document.getElementById("orderDetails");
-    orderDetails.innerHTML = "";
-    OrderList.forEach(order => {
-        if (order.UserID == currentUser.userID) {
-            orderDetails.innerHTML += `<tr><td>${order.OrderID}</td>
-                <td>${order.MedicineName}</td>
-                <td>${order.Quantity}</td> 
-                <td>${order.OrderDate.toLocaleDateString()}</td>
-                <td>${order.OrderStatus}</td>`;
-        }
+function showOrderHistory() {
+    return __awaiter(this, void 0, void 0, function* () {
+        home.style.display = "none";
+        medicineTable.style.display = "none";
+        purchaseTable.style.display = "none";
+        showuserBalance.style.display = "none";
+        topupBalance.style.display = "none";
+        orderHistory.style.display = "block";
+        cancel.style.display = "none";
+        const OrderList = yield fetchOrders();
+        let orderDetails = document.getElementById("orderDetails");
+        orderDetails.innerHTML = "";
+        OrderList.forEach(order => {
+            if (order.userid == currentUser.userid) {
+                orderDetails.innerHTML += `<tr><td>${order.orderid}</td>
+                <td>${order.medicineName}</td>
+                <td>${order.quantity}</td> 
+                <td>${order.orderDate.split('T')[0].split('-').reverse().join('/')}</td>
+                <td>${order.orderStatus}</td>`;
+            }
+        });
     });
-};
+}
 let showBalance = () => {
     home.style.display = "none";
     medicineTable.style.display = "none";

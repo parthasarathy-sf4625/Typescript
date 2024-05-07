@@ -1,7 +1,40 @@
-let UserIdAutoIncrement = 1000;
-let MedicineIdAutoIncrement = 0;
-let OrderIdAutoIncrement = 0;
+//User Info Class
+interface UserInfo {
+    userid: number;
+    userName: string;
+    userEmail: string;
+    userPassword: string;
+    phone: string;
+    balance: number;
+}
+//User Info Class Ends
 
+//
+
+//Medicine Class 
+interface MedicineInfo {
+
+    medicineid: number;
+    medicineName: string;
+    medicinePrice: number;
+    quantity: number;
+    expireyDate: string;
+
+}
+//Medicine Class  ends
+//Order Details
+
+interface OrderDetails {
+
+    orderid: number;
+    medicineid: number;
+    userid: number;
+    medicineName: string;
+    quantity: number;
+    orderDate: string;
+    totalPrice: number;
+    orderStatus: string;
+}
 
 
 let home = document.getElementById("home") as HTMLDivElement;
@@ -22,103 +55,14 @@ let orderHistory = document.getElementById("orderHistory") as HTMLDivElement;
 
 let topupBalance = document.getElementById("topup") as HTMLDivElement;
 
+
 let currentUser: UserInfo;
 
 let selectedMedicine: MedicineInfo;
 
 let selectedOrder: OrderDetails;
 
-
-
-//User Info Class
-class UserInfo {
-    userID: string;
-    userName: string;
-    userEmail: string;
-    userPassword: string;
-    phone: string;
-    balance: number;
-
-    constructor(paramName: string, paramuserEmail: string, paramuserPassword: string, paramPhone: string) {
-        UserIdAutoIncrement++;
-        this.userID = "UID" + UserIdAutoIncrement;
-        this.userName = paramName;
-        this.userEmail = paramuserEmail;
-        this.userPassword = paramuserPassword;
-        this.phone = paramPhone;
-        this.balance = 0;
-    }
-
-}
-//User Info Class Ends
-
-//
-
-//Medicine Class 
-class MedicineInfo {
-
-    MedicineID: string;
-    MedicineName: string;
-    MedicinePrice: number;
-    Quantity: number;
-    ExpireyDate: Date;
-
-    constructor(paramMedicineName: string, paramMedicinePrice: number, paramQuantity: number, paramExpireyDate: Date) {
-        MedicineIdAutoIncrement++;
-        this.MedicineID = "MID" + MedicineIdAutoIncrement;
-        this.MedicineName = paramMedicineName;
-        this.MedicinePrice = paramMedicinePrice;
-        this.Quantity = paramQuantity;
-        this.ExpireyDate = paramExpireyDate;
-    }
-
-}
-//Medicine Class  ends
-//Order Details
-
-class OrderDetails {
-
-    OrderID: string;
-    MedicineID: string;
-    UserID: string;
-    MedicineName: string;
-    Quantity: number;
-    OrderDate: Date;
-    TotalPrice: number;
-    OrderStatus: string;
-
-    constructor(paramMedicineID: string, paramUserID: string, paramMedicineName: string, paramQuantity: number, paramOrderDate: Date, paramTotalPrice: number, paramOrderStatus: string) {
-        OrderIdAutoIncrement++;
-
-        this.OrderID = "OID " + OrderIdAutoIncrement;
-        this.MedicineID = paramMedicineID;
-        this.UserID = paramUserID;
-        this.MedicineName = paramMedicineName;
-        this.Quantity = paramQuantity;
-        this.OrderDate = paramOrderDate;
-        this.TotalPrice = paramTotalPrice;
-        this.OrderStatus = paramOrderStatus;
-    }
-}
-
-
 //Adding Default Data and creating list
-
-let MedicineList: MedicineInfo[] = [];
-MedicineList.push(new MedicineInfo("Paracetomol", 5, 50, new Date(2024, 5, 29)));
-MedicineList.push(new MedicineInfo("Colpal", 5, 60, new Date(2024, 5, 29)));
-MedicineList.push(new MedicineInfo("Stepsil", 5, 70, new Date(2024, 5, 29)));
-MedicineList.push(new MedicineInfo("Iodex", 5, 80, new Date(2024, 3, 29)));
-MedicineList.push(new MedicineInfo("Acetherol", 5, 100, new Date(2024, 5, 29)));
-
-let UserList: UserInfo[] = [];
-
-UserList.push(new UserInfo("Kal el", "manofsteel", "krypton", "9876543210"));
-UserList.push(new UserInfo("Bruce Wayne", "darkknight", "thedarkknight", "7574893947"));
-
-let OrderList: OrderDetails[] = [];
-
-
 
 let SignInPage = () => {
     let signinpage = document.getElementById("signin") as HTMLDivElement;
@@ -126,8 +70,6 @@ let SignInPage = () => {
 
     signinpage.style.display = "block";
     signuppage.style.display = "none";
-
-
 }
 
 let SignUpPage = () => {
@@ -139,6 +81,43 @@ let SignUpPage = () => {
 
 }
 
+async function addUser(user: UserInfo): Promise<void> {
+    const response = await fetch('http://localhost:5151/api/UserInfo', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(user)
+    }
+    );
+    if (!response.ok) {
+        throw new Error('Failed to add User');
+    }
+
+}
+
+async function updateUser(id: number, user: UserInfo): Promise<void> {
+    const response = await fetch(`http://localhost:5151/api/UserInfo/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(user)
+    });
+    if (!response.ok) {
+        throw new Error('Failed to update User');
+    }
+}
+
+async function fetchUsers(): Promise<UserInfo[]> {
+    const apiurl = 'http://localhost:5151/api/UserInfo';
+    const response = await fetch(apiurl);
+    if (!response.ok) {
+        throw new Error('Failed to fetch Users');
+    }
+    return await response.json();
+}
+
 let newUserCreation = () => {
     let name = document.getElementById("name") as HTMLInputElement;
     let emailID = document.getElementById("emailID") as HTMLInputElement;
@@ -146,37 +125,44 @@ let newUserCreation = () => {
     let password = document.getElementById("password") as HTMLInputElement;
     let confirmPassword = document.getElementById("confirmpassword") as HTMLInputElement;
 
-    UserList.push(new UserInfo(name.value, emailID.value, phone.value, password.value));
+    //UserList.push(new UserInfo(name.value, emailID.value, phone.value, password.value));
+    const user:UserInfo={
+        userid :1,
+        userName :name.value,
+        userEmail :emailID.value,
+        phone :phone.value,
+        userPassword:password.value,
+        balance:0
+    }
+    addUser(user);
     alert("Registeration Sucessfull");
     SignInPage();
 }
-let existinguser = () => {
-   
 
+async function existinguser() {
 
+    const UserList = await fetchUsers();
     let mail = document.getElementById("existingMailid") as HTMLInputElement;
     let password = document.getElementById("existingPassword") as HTMLInputElement;
     let validuser = false;
     UserList.forEach(user => {
-            if(user.userEmail == mail.value && user.userPassword == password.value){
-                validuser = true;
-                currentUser = user;
-                let form = document.getElementById("form") as HTMLDivElement;
-                let afterlogin = document.getElementById("afterlogin") as HTMLDivElement;
-                form.style.display = "none";
-                afterlogin.style.display = "block";
-                homePage();
-                return false;
-            }
-            
+        if (user.userEmail == mail.value && user.userPassword == password.value) {
+            validuser = true;
+            currentUser = user;
+            let form = document.getElementById("form") as HTMLDivElement;
+            let afterlogin = document.getElementById("afterlogin") as HTMLDivElement;
+            form.style.display = "none";
+            afterlogin.style.display = "block";
+            homePage();
+            return false;
+        }
+
     });
-    if(!validuser){
+    if (!validuser) {
         alert("Invalid user Name or Password");
     }
 
-        
-    
-    
+
 }
 
 let homePage = () => {
@@ -191,9 +177,18 @@ let homePage = () => {
 }
 
 //Show Medicine List
-let renderMedicineTable = () => {
+
+async function fetchMedicines(): Promise<MedicineInfo[]> {
+    const apiurl = 'http://localhost:5151/api/MedicineInfo';
+    const response = await fetch(apiurl);
+    if (!response.ok) {
+        throw new Error('Failed to fetch Medicine');
+    }
+    return await response.json();
+}
 
 
+async function renderMedicineTable() {
     home.style.display = "none";
     medicineTable.style.display = "block";
     purchaseTable.style.display = "none";
@@ -202,32 +197,31 @@ let renderMedicineTable = () => {
     orderHistory.style.display = "none";
     cancel.style.display = "none";
 
-
-
+    const MedicineList = await fetchMedicines()
     let iterate = 0;
     medicinetableBody.innerHTML = "";
     MedicineList.forEach((item) => {
-        if (item.ExpireyDate > new Date()) {
+        if (new Date(item.expireyDate) > new Date()) {
             if (iterate++ == 0) {
                 medicinetableBody.innerHTML = `<tr>
-                    <td>${item.MedicineName}</td>
-                    <td>${item.MedicinePrice}</td>
-                    <td>${item.Quantity}</td>
-                    <td>${item.ExpireyDate.toLocaleDateString()}</td>
-                    <td><button onclick = "return showeditMedicine('${item.MedicineID}')" >Edit</button>
-                    <button onclick = "return deleteMedicine('${item.MedicineID}')" >Delete</button>
+                    <td>${item.medicineName}</td>
+                    <td>${item.medicinePrice}</td>
+                    <td>${item.quantity}</td>
+                    <td>${item.expireyDate.split('T')[0].split('-').reverse().join('/')}</td>
+                    <td><button onclick = "return showeditMedicine('${item.medicineid}')" >Edit</button>
+                    <button onclick = "return deleteMedicine('${item.medicineid}')" >Delete</button>
                     </td>
                     </tr>`
             }
 
             else {
                 medicinetableBody.innerHTML += `<tr>
-                <td>${item.MedicineName}</td>
-                <td>${item.MedicinePrice}</td>
-                <td>${item.Quantity}</td>
-                <td>${item.ExpireyDate.toLocaleDateString()}</td>
-                <td><button onclick = "return showeditMedicine('${item.MedicineID}')" >Edit</button>
-                <button onclick = "return deleteMedicine('${item.MedicineID}')" >Delete</button>
+                <td>${item.medicineName}</td>
+                <td>${item.medicinePrice}</td>
+                <td>${item.quantity}</td>
+                <td>${item.expireyDate.split('T')[0].split('-').reverse().join('/')}</td>
+                <td><button onclick = "showeditMedicine(${item.medicineid})" >Edit</button>
+                <button onclick = "deleteMedicine(${item.medicineid})" >Delete</button>
                 </td>
                 </tr>`
             }
@@ -248,18 +242,43 @@ let showaddMedicine = () => {
     editMedicine.style.display = "none";
 
 };
-//Show Add Medicine
+//Add Medicine 
+
+async function addMedicineAPI(medicine: MedicineInfo): Promise<void> {
+    const response = await fetch('http://localhost:5151/api/MedicineInfo', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(medicine)
+    }
+    );
+    if (!response.ok) {
+        throw new Error('Failed to add Medicine');
+    }
+    renderMedicineTable();
+}
 let addMedicine = () => {
     let getMedicine = document.getElementById("AddMedicine") as HTMLDivElement;
     getMedicine.style.display = "block";
 
-    let MedicineName = document.getElementById("MedcineName") as HTMLInputElement;
-    let Price = document.getElementById("Price") as HTMLInputElement;
-    let Quantity = document.getElementById("Quantity") as HTMLInputElement;
-    let ExpireyDate = document.getElementById("ExpiryDate") as HTMLInputElement;
+    let name = document.getElementById("MedcineName") as HTMLInputElement;
+    let price = document.getElementById("Price") as HTMLInputElement;
+    let quantity = document.getElementById("quantity") as HTMLInputElement;
+    let date = document.getElementById("ExpiryDate") as HTMLInputElement;
 
-    MedicineList.push(new MedicineInfo(MedicineName.value, parseInt(Price.value), parseInt(Quantity.value), new Date(ExpireyDate.value)));
-    renderMedicineTable();
+   // MedicineList.push(new MedicineInfo(medicineName.value, parseInt(Price.value), parseInt(quantity.value), new Date(expireyDate.value)));
+
+   const medicine:MedicineInfo={
+    medicineid: 1,
+    medicineName: name.value,
+    medicinePrice: parseInt(price.value),
+    quantity: parseInt(quantity.value),
+    expireyDate: date.value,
+   }
+
+   addMedicineAPI(medicine);
+   
 
     let form = document.getElementById("AddMedicineForm") as HTMLFormElement;
     form.reset();
@@ -267,66 +286,92 @@ let addMedicine = () => {
     return false;
 };
 
-let showeditMedicine = (id: string) => {
+async function showeditMedicine(id: Number) {
+
     let getMedicine = document.getElementById("AddMedicine") as HTMLDivElement;
     getMedicine.style.display = "none";
+    const MedicineList = await fetchMedicines()
     MedicineList.forEach((medicine) => {
 
-        if (medicine.MedicineID == id) {
+        if (medicine.medicineid == id) {
             let editMedicine = document.getElementById("EditMedicine") as HTMLDivElement;
             editMedicine.style.display = "block";
 
-            editMedicine.innerHTML += `<button onclick="return editMedicine('${medicine.MedicineID}')">Submit</button>`
+            editMedicine.innerHTML += `<button onclick="return editMedicine('${medicine.medicineid}')">Submit</button>`
 
-            
-            let MedicineName = document.getElementById("EditMedcineName") as HTMLInputElement;
+
+            let medicineName = document.getElementById("EditMedcineName") as HTMLInputElement;
             let Price = document.getElementById("EditPrice") as HTMLInputElement;
-            let Quantity = document.getElementById("EditQuantity") as HTMLInputElement;
-            let ExpireyDate = document.getElementById("ExpiryDate") as HTMLInputElement;
+            let quantity = document.getElementById("Editquantity") as HTMLInputElement;
+            let expireyDate = document.getElementById("ExpiryDate") as HTMLInputElement;
 
-            var date = medicine.ExpireyDate.toISOString();
+            //var date = medicine.expireyDate.toISOString();
 
-            MedicineName.value = medicine.MedicineName;
-            Price.value = medicine.MedicinePrice.toString();
-            Quantity.value = medicine.Quantity.toString();
-            ExpireyDate.value =date.substring(0,10);
-            return false;
+            medicineName.value = medicine.medicineName;
+            Price.value = medicine.medicinePrice.toString();
+            quantity.value = medicine.quantity.toString();
+
+
+            //expireyDate.value = date.substring(0, 10);
         }
     })
 }
 
-let editMedicine = (id: string) => {
-
-    let MedicineName = document.getElementById("EditMedcineName") as HTMLInputElement;
-    let Price = document.getElementById("EditPrice") as HTMLInputElement;
-    let Quantity = document.getElementById("EditQuantity") as HTMLInputElement;
-    let ExpireyDate = document.getElementById("ExpiryDate") as HTMLInputElement;
-
-    MedicineList.forEach(medicine => {
-        if (medicine.MedicineID == id) {
-            medicine.MedicineName = MedicineName.value;
-            medicine.MedicinePrice = parseInt(Price.value);
-            var date
-            medicine.Quantity = parseInt(Quantity.value);
-            medicine.ExpireyDate = new Date(ExpireyDate.value);
-        }
-
+async function updateMedicine(id: number, medicine: MedicineInfo): Promise<void> {
+    const response = await fetch(`http://localhost:5151/api/MedicineInfo/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(medicine)
     });
+    if (!response.ok) {
+        throw new Error('Failed to update contact');
+    }
+    renderMedicineTable();
+}
+
+async function editMedicine(id: number) {
+
+    let medicineName = document.getElementById("EditMedcineName") as HTMLInputElement;
+    let Price = document.getElementById("EditPrice") as HTMLInputElement;
+    let quantity = document.getElementById("Editquantity") as HTMLInputElement;
+    let expireyDate = document.getElementById("ExpiryDate") as HTMLInputElement;
+
+    const MedicineList = await fetchMedicines()
+
+
+    const medicine: MedicineInfo = {
+        medicineid: selectedMedicine.medicineid,
+        medicineName: medicineName.value,
+        quantity: parseInt(quantity.value),
+        medicinePrice: parseInt(Price.value),
+        expireyDate: expireyDate.value
+    }
 
     let editform = document.getElementById("EditMedicineForm") as HTMLFormElement;
     editform.reset();
-    renderMedicineTable();
-    return false;
-}
+    
+    updateMedicine(selectedMedicine.medicineid, medicine);
 
-let deleteMedicine = (id: string) => {
-    MedicineList = MedicineList.filter((item) => item.MedicineID !== id);
-    console.log(MedicineList.length);
-    renderMedicineTable();
 }
 
 
-let purchaseMedicine = () => {
+
+async function deleteMedcine(id: number): Promise<void> {
+    const response = await fetch(`http://localhost:5151/api/MedicineInfo/${id}`, {
+        method: 'DELETE'
+    });
+    if (!response.ok) {
+        throw new Error('Failed to delete Medicine');
+    }
+    renderMedicineTable();
+}
+
+
+
+
+async function purchaseMedicine() {
     home.style.display = "none";
     medicineTable.style.display = "none";
     purchaseTable.style.display = "block";
@@ -334,18 +379,18 @@ let purchaseMedicine = () => {
     topupBalance.style.display = "none";
     orderHistory.style.display = "none";
     cancel.style.display = "none";
-
+    const MedicineList = await fetchMedicines()
     let iterate = 0;
     purchasetableBody.innerHTML = "";
     MedicineList.forEach((item) => {
-        if (item.ExpireyDate > new Date()) {
+        if (new Date(item.expireyDate) > new Date()) {
             if (iterate++ == 0) {
                 purchasetableBody.innerHTML = `<tr>
-                    <td>${item.MedicineName}</td>
-                    <td>${item.MedicinePrice}</td>
-                    <td>${item.Quantity}</td>
-                    <td>${item.ExpireyDate.toLocaleDateString()}</td>
-                    <td><button onclick = "return showBuyMedicine('${item.MedicineID}')" >Buy</button><br>
+                    <td>${item.medicineName}</td>
+                    <td>${item.medicinePrice}</td>
+                    <td>${item.quantity}</td>
+                    <td>${item.expireyDate.split('T')[0].split('-').reverse().join('/')}</td>
+                    <td><button onclick = "return showBuyMedicine('${item.medicineid}')" >Buy</button><br>
                     
                     </td>
                     </tr>`
@@ -353,11 +398,11 @@ let purchaseMedicine = () => {
 
             else {
                 purchasetableBody.innerHTML += `<tr>
-                <td>${item.MedicineName}</td>
-                <td>${item.MedicinePrice}</td>
-                <td>${item.Quantity}</td>
-                <td>${item.ExpireyDate.toLocaleDateString()}</td>
-                <td><button onclick = "return showBuyMedicine('${item.MedicineID}')" >Buy</button>
+                <td>${item.medicineName}</td>
+                <td>${item.medicinePrice}</td>
+                <td>${item.quantity}</td>
+                <td>${item.expireyDate.split('T')[0].split('-').reverse().join('/')}</td>
+                <td><button onclick = "return showBuyMedicine('${item.medicineid}')" >Buy</button>
                 </td>
                 </tr>`
             }
@@ -365,47 +410,71 @@ let purchaseMedicine = () => {
         }
 
     });
-
 }
 
-let showBuyMedicine = (id: string) => {
+async function showBuyMedicine(id: number) {
 
     let buyMedicineform = document.getElementById("purchaseDetails") as HTMLDivElement;
     buyMedicineform.style.display = "block";
-
+    const MedicineList = await fetchMedicines()
     MedicineList.forEach(medicine => {
-        if (medicine.MedicineID == id) {
+        if (medicine.medicineid == id) {
             selectedMedicine = medicine;
         }
-
     });
-}
-
-let buyMedicine = () => {
-    let buyform = document.getElementById("purchaseform") as HTMLFormElement;
-    let buyQuantity = document.getElementById("Purchacequantity") as HTMLInputElement;
-
-    if (parseInt(buyQuantity.value) > selectedMedicine.Quantity) {
-        alert("Sorry the Selected Quantity is unavailable");
-    }
-    else {
-        let TotalPrice = parseInt(buyQuantity.value) * selectedMedicine.MedicinePrice;
-        if (TotalPrice > currentUser.balance) {
-            alert("Insufficaint Balance . ...Please Recharge");
-        }
-        else {
-            selectedMedicine.Quantity -= parseInt(buyQuantity.value);
-            currentUser.balance -= TotalPrice;
-            OrderList.push(new OrderDetails(selectedMedicine.MedicineID, currentUser.userID, selectedMedicine.MedicineName, parseInt(buyQuantity.value), new Date(), TotalPrice, "Ordered"));
-            alert("Order Placed Sucessfully");
-            purchaseMedicine();
-        }
-    }
-    buyform.reset();
     return false;
 }
 
-let showcancelOrder = () => {
+//Add order
+async function fetchOrders(): Promise<OrderDetails[]> {
+    const apiurl = 'http://localhost:5151/api/OrderDetails';
+    const response = await fetch(apiurl);
+    if (!response.ok) {
+        throw new Error('Failed to fetch Orders');
+    }
+    return await response.json();
+}
+
+async function addOrder(order: OrderDetails): Promise<void> {
+    const response = await fetch('http://localhost:5151/api/OrderDetails', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(order)
+    }
+    );
+    if (!response.ok) {
+        throw new Error('Failed to add Order');
+    }
+
+}
+
+// let buyMedicine = () => {
+//     let buyform = document.getElementById("purchaseform") as HTMLFormElement;
+//     let buyquantity = document.getElementById("Purchacequantity") as HTMLInputElement;
+
+//     if (parseInt(buyquantity.value) > selectedMedicine.quantity) {
+//         alert("Sorry the Selected quantity is unavailable");
+//     }
+//     else {
+//         let totalPrice = parseInt(buyquantity.value) * selectedMedicine.medicinePrice;
+//         if (totalPrice > currentUser.balance) {
+//             alert("Insufficaint Balance . ...Please Recharge");
+//         }
+//         else {
+//             selectedMedicine.quantity -= parseInt(buyquantity.value);
+//             currentUser.balance -= totalPrice;
+//             OrderList.push(new OrderDetails(selectedMedicine.medicineID, currentUser.userID, selectedMedicine.medicineName, parseInt(buyquantity.value), new Date(), totalPrice, "Ordered"));
+//             alert("Order Placed Sucessfully");
+//             purchaseMedicine();
+//         }
+//     }
+//     buyform.reset();
+//     return false;
+// }
+
+async function showcancelOrder() {
     home.style.display = "none";
     medicineTable.style.display = "none";
     purchaseTable.style.display = "none";
@@ -414,32 +483,37 @@ let showcancelOrder = () => {
     orderHistory.style.display = "none";
     cancel.style.display = "block";
 
+    const OrderList = await fetchOrders()
     let orderDetails = document.getElementById("cancelorderDetails") as HTMLTableElement;
 
     orderDetails.innerHTML = "";
 
     OrderList.forEach(order => {
-        if (order.UserID == currentUser.userID && order.OrderStatus == "Ordered") {
+        if (order.userid == currentUser.userid && order.orderStatus == "Ordered") {
 
-            orderDetails.innerHTML += `<tr><td>${order.OrderID}</td>
-                <td>${order.MedicineName}</td>
-                <td>${order.Quantity}</td> 
-                <td>${order.OrderDate.toLocaleDateString()}</td>
-                <td>${order.OrderStatus}</td>
-                <td><button onclick = "return cancelOrder('${order.OrderID}')" >Cancel</button><br>`
+            orderDetails.innerHTML += `<tr><td>${order.orderid}</td>
+                <td>${order.medicineName}</td>
+                <td>${order.quantity}</td> 
+                <td>${order.orderDate.split('T')[0].split('-').reverse().join('/')}</td>
+                <td>${order.orderStatus}</td>
+                <td><button onclick = "return cancelOrder('${order.orderid}')" >Cancel</button><br>`
 
         }
     });
 }
 
-let cancelOrder = (id: string) => {
+async function cancelOrder(id: number) {
+
+
+    const MedicineList = await fetchMedicines();
+    const OrderList = await fetchOrders()
     OrderList.forEach(order => {
-        if (order.OrderID == id) {
-            order.OrderStatus = "Cancelled";
-            currentUser.balance += order.TotalPrice;
+        if (order.orderid == id) {
+            order.orderStatus = "Cancelled";
+            currentUser.balance += order.totalPrice;
             MedicineList.forEach(medicine => {
-                if (medicine.MedicineID == order.MedicineID) {
-                    medicine.Quantity += order.Quantity;
+                if (medicine.medicineid == order.medicineid) {
+                    medicine.quantity += order.quantity;
                     alert("Sucessfully cancelled");
 
                 }
@@ -466,14 +540,23 @@ let showtopup = () => {
 
 let topup = () => {
     let amount = document.getElementById("amount") as HTMLInputElement;
-    currentUser.balance += parseInt(amount.value);
+    
 
     let topupform = document.getElementById("topupform") as HTMLFormElement;
     topupform.reset();
+    const user:UserInfo = {
+        userid: currentUser.userid,
+    userName: currentUser.userName,
+    userEmail: currentUser.userEmail,
+    userPassword: currentUser.userPassword,
+    phone: currentUser.phone,
+    balance: currentUser.balance += parseInt(amount.value)        
+    }
+    updateUser(currentUser.userid,user);
     return false;
 }
 
-let showOrderHistory = () => {
+async function showOrderHistory() {
 
     home.style.display = "none";
     medicineTable.style.display = "none";
@@ -483,18 +566,19 @@ let showOrderHistory = () => {
     orderHistory.style.display = "block";
     cancel.style.display = "none";
 
+    const OrderList = await fetchOrders();
     let orderDetails = document.getElementById("orderDetails") as HTMLTableElement;
 
     orderDetails.innerHTML = "";
 
     OrderList.forEach(order => {
-        if (order.UserID == currentUser.userID) {
+        if (order.userid == currentUser.userid) {
 
-            orderDetails.innerHTML += `<tr><td>${order.OrderID}</td>
-                <td>${order.MedicineName}</td>
-                <td>${order.Quantity}</td> 
-                <td>${order.OrderDate.toLocaleDateString()}</td>
-                <td>${order.OrderStatus}</td>`
+            orderDetails.innerHTML += `<tr><td>${order.orderid}</td>
+                <td>${order.medicineName}</td>
+                <td>${order.quantity}</td> 
+                <td>${order.orderDate.split('T')[0].split('-').reverse().join('/')}</td>
+                <td>${order.orderStatus}</td>`
 
         }
     });
