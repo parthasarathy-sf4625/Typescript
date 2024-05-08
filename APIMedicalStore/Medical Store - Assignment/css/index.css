@@ -1,0 +1,159 @@
+*{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+   
+}
+.home,.showBalance{
+    margin: 10%;
+    display: none;
+    font-size: 400%;
+    font-weight: bolder;
+    font-style: italic;
+    text-align: center;
+}
+
+.row{
+    padding: 0% 0% 0% 30%;
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+}
+
+.rowbuttons{
+    padding:  3% 5%;
+    background-color: black;
+    font-size: 110%;
+    width: 100%;
+    color: white;
+    width: auto;
+}
+
+.form{
+    width: 30%;
+    margin: 10% 34%;
+
+    background-color: rgb(192, 192, 212);
+}
+.signup{
+    display: block;
+    padding: 10%;
+}
+
+.input{
+    font-size: 110%;
+    width: 80%;
+    height: 5%;
+}
+.signinbutton{
+    padding:  3% 5%;
+    background-color: black;
+    font-size: 110%;
+    color: white;
+    width: auto;
+}
+
+.signin{
+    display: none; 
+    padding: 10%;
+}
+.input{
+    width : 80%;
+}
+
+.afterlogin{
+    display: none;
+    justify-content: left;
+}
+
+.afterloginrow{
+    padding: 0% 0% 0% 0%;
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+}
+
+
+.afterloginbuttons{
+    padding:  3% 5%;
+    background-color: black;
+    font-size: 90%;
+    width: 50%;
+    color: white;
+    width: auto;
+}
+
+.medicineDetails,.cancelOrder,.purchase,.orderHistory{
+    display: none;
+    width: 150%;
+    margin: 10% 30%;
+}
+
+.topup{
+    display: none;
+    width: 150%;
+    margin: 10% 30%;
+}
+.inputtopup{
+    font-size: 110%;
+    width: 40%;
+    height: 5%;
+}
+
+.addbutton{
+    padding:  0% 1%;
+    background-color: black;
+    font-size: 110%;
+    margin: 1%;
+    color: white;
+    width: auto;
+}
+.AddMedicine{
+    display: none;
+}
+.EditMedicine{
+    display: none;
+}
+
+.medcinetablebuttons{
+    padding: 10%;
+    width: 90%;
+    background-color: black;
+    color: white;
+}
+.purchase{
+    display: none;
+}
+.purchaseDetails{
+    display: none;
+}
+
+.cancelOrder{
+    display: none;
+}
+.cancelbutton{
+    padding:  0% 1%;
+    background-color: black;
+    font-size: 110%;
+    margin: 1%;
+    color: white;
+    width: auto;
+}
+
+
+
+
+.topup{
+    display: none;
+}
+
+table,th,td{
+    border: 1px solid black;
+    width: 25%;
+}
+
+.Logout{
+    background-color: black;
+    font-size: 90%;
+    width: 100%;
+    color: white;
+    margin: 10%;
+}

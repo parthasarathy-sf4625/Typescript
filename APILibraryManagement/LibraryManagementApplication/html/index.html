@@ -1,0 +1,137 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="../css/index.css">
+</head>
+<title>
+    Library Management
+</title>
+
+<body>
+
+    <div class="form" id="form">
+        <div class="row">
+            <button class="rowbuttons" onclick="SignUpPage()">
+                Sign Up
+            </button>
+            <button class="rowbuttons" onclick="SignInPage()">
+                Sign in
+            </button>
+        </div>
+        <div class="signup" id="signup">
+
+            <h3>Sign Up </h3>
+            <input class="input" type="text" id="userName" placeholder="Name"> <br><br>
+            <input class="input" type="text" id="email" placeholder="Email"> <br><br>
+            <input class="input" type="text" id="phone" placeholder="Phone"><br><br>
+            <input class="input" type="text" id="department" placeholder="Department"> <br><br>
+            
+            <input class="input" type="password" id="password" placeholder="Password"><br><br>
+            <input class="input" type="password" id="confirmpassword" placeholder="Confirm Password"><br><br>
+            <button class="signinbutton" onclick="newUserCreation()">Sign Up</button>
+        </div>
+
+        <div class="signin" id="signin">
+            <h3>Sign In</h3>
+            <input class="input" type="text" id="existingMailid" placeholder="Email"><br><br>
+            <input class="input" type="password" id="existingPassword" placeholder="Password"><br><br>
+            <button class="signinbutton" onclick="existingUser()" type="button">Sign In</button><br>
+            <br>
+            <br>
+        </div>
+    </div>
+
+    <!-- Top menu bar -->
+    <div class="afterlogin" id="afterlogin">
+        <div class="afterloginrow">
+            <button class="afterloginbuttons" onclick="homePage()">Home</button>
+            <button class="afterloginbuttons" onclick="showBorrow()">Borrow</button>
+            <button class="afterloginbuttons" onclick="showBorrowHistory()">Show Borrow History </button>
+            <button class="afterloginbuttons" onclick="showReturn()">Return Books</button>
+            <button class="afterloginbuttons" onclick="recharge()">WalletRecharge </button>
+            <button class="afterloginbuttons" onclick="showWalletBalance()">WalletBalance </button>
+            <form>
+                <button class="Logout" onclick="" type="submit">Logout</button>
+            </form>
+        </div>
+
+    </div>
+
+    <div class="home" id="home">
+
+    </div>
+
+    <!-- Balance Check -->
+    <div class="showBalance" id="showBalance">
+
+    </div>
+
+    <!-- Topup -->
+    <div class="topup" id="topup">
+        <h1>Enter The Amount to top up</h1>
+            <form id="topupform">
+            <input class="inputtopup" type="number" name="amount" id="amount" placeholder="Enter the amount to Topup">
+           </form>
+            <button class="addbutton" onclick="topupWallet()">Topup</button>
+
+    </div>
+    <!-- Travel History  -->
+    <div class="travelHistory" id="travelHistory">
+
+        <table>
+            <tr>
+                <th>Book ID</th>
+                <th>UserID</th>
+                <th>Borrowed Date</th>
+                <th>Borrowed Count</th>
+                <th>Status</th>
+                <th>PaidFineAmount</th>
+            </tr>
+            <tbody id="travelHistoryBody">
+
+            </tbody>
+        </table>
+
+
+    </div>
+
+    <div class="travelHistory" id="returnBook">
+
+        <table>
+            <tr>
+                <th>Book ID</th>
+                <th>UserID</th>
+                <th>Borrowed Date</th>
+                <th>Borrowed Count</th>
+                <th>Status</th>
+
+                <th>Actions</th>
+            </tr>
+            <tbody id="returnBookBody">
+
+            </tbody>
+        </table>
+
+
+    </div>
+
+
+    <!-- Purchace -->
+    <div class="travel" id="travel">
+        <table>
+            <tr>
+                <th>TravelID</th>
+                <th>From</th>
+                <th>To</th>
+                <th>Travel Date</th>
+                <th>Price</th>
+            </tr>
+            <tbody id="travelBody">
+
+            </tbody>
+        </table>
+    </div>
+</body>
+<script src="../script/index.js"></script>
+
+</html>
