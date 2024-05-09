@@ -2,9 +2,10 @@
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
    
 }
-.home{
+.home,.showBalance{
+    margin: 10%;
     display: none;
-    font-size: larger;
+    font-size: 400%;
     font-weight: bolder;
     font-style: italic;
     text-align: center;
@@ -14,6 +15,7 @@
     padding: 0% 0% 0% 30%;
     display: flex;
     flex-direction: row;
+    justify-content: left;
 }
 
 .rowbuttons{
@@ -59,19 +61,59 @@
 
 .afterlogin{
     display: none;
+    justify-content: left;
 }
 
-.medicineDetails{
-    display: none;
+.afterloginrow{
+    padding: 0% 0% 0% 0%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
 }
 
-.AddMedicine{
-    display: none;
-}
-.EditMedicine{
-    display: none;
+
+.afterloginbuttons{
+    padding:  3% 5%;
+    background-color: black;
+    font-size: 90%;
+    width: 50%;
+    color: white;
+    width: auto;
 }
 
+.travelHistory,.travel{
+    display: none;
+    width: 150%;
+    margin: 10% 30%;
+}
+
+.topup{
+    display: none;
+    width: 150%;
+    margin: 10% 30%;
+}
+.inputtopup{
+    font-size: 110%;
+    width: 40%;
+    height: 5%;
+}
+
+.addbutton{
+    padding:  0% 1%;
+    background-color: black;
+    font-size: 110%;
+    margin: 1%;
+    color: white;
+    width: auto;
+}
+
+
+.medcinetablebuttons{
+    padding: 10%;
+    width: 90%;
+    background-color: black;
+    color: white;
+}
 .purchase{
     display: none;
 }
@@ -79,25 +121,19 @@
     display: none;
 }
 
-.cancelOrder{
-    display: none;
-
-}
-.showBalance{
-    display: none;
-}
-
-.orderHistory{
-    display: none;
-}
-
-
 .topup{
     display: none;
 }
 
-
 table,th,td{
     border: 1px solid black;
-    
+    width: 25%;
+}
+
+.Logout{
+    background-color: black;
+    font-size: 90%;
+    width: 100%;
+    color: white;
+    margin: 10%;
 }

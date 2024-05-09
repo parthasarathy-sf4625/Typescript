@@ -1,154 +1,219 @@
-//User Info Class
-interface UserInfo {
-    userid: number;
+interface personalDetails {
+    cardNumber: number;
     userName: string;
-    userEmail: string;
-    userPassword: string;
+    email: string;
     phone: string;
-    balance: number;
-}
-//User Info Class Ends
-
-//
-
-//Medicine Class 
-interface MedicineInfo {
-
-    medicineid: number;
-    medicineName: string;
-    medicinePrice: number;
-    quantity: number;
-    expireyDate: string;
-
-}
-//Medicine Class  ends
-//Order Details
-
-interface OrderDetails {
-
-    orderid: number;
-    medicineid: number;
-    userid: number;
-    medicineName: string;
-    quantity: number;
-    orderDate: string;
-    totalPrice: number;
-    orderStatus: string;
+    password: string;
+    walletBalance: number;
 }
 
+interface ticketDetails {
+    ticketID: number;
+    fromLocation: string;
+    toLocation: string;
+    ticketPrice: number;
+}
+
+interface travelDetails {
+    travelID: number;
+    cardNumber: number;
+    fromLocation: string;
+    toLocation: string;
+    travelDate: string;
+    travelPrice: number;
+}
+
+
+//global vars
+
+let currentUser: personalDetails;
+
+let currentTicket: ticketDetails;
+
+let currentTravel: travelDetails;
+
+let form = document.getElementById("form") as HTMLDivElement;
+
+let afterlogin = document.getElementById("afterlogin") as HTMLDivElement;
 
 let home = document.getElementById("home") as HTMLDivElement;
 
-let medicineTable = document.getElementById("medicineDetails") as HTMLDivElement;
+let showBalance = document.getElementById("showBalance") as HTMLDivElement;
 
-let medicinetableBody = document.getElementById("medicineTable") as HTMLTableElement;
+let topup = document.getElementById("topup") as HTMLTableElement;
 
-let purchaseTable = document.getElementById("purchase") as HTMLDivElement;
+let travelHistory = document.getElementById("travelHistory") as HTMLDivElement;
 
-let purchasetableBody = document.getElementById("purchaseTable") as HTMLTableElement;
+let travel = document.getElementById("travel") as HTMLDivElement;
 
-let showuserBalance = document.getElementById("showBalance") as HTMLDivElement;
+//fetching data
 
-let cancel = document.getElementById("cancelOrder") as HTMLDivElement;
+async function fetchPersonalDetails(): Promise<personalDetails[]> {
 
-let orderHistory = document.getElementById("orderHistory") as HTMLDivElement;
+    const apiurl = "http://localhost:5143/api/personalDetails";
+    const response = await fetch(apiurl);
 
-let topupBalance = document.getElementById("topup") as HTMLDivElement;
-
-
-let currentUser: UserInfo;
-
-let selectedMedicine: MedicineInfo;
-
-let selectedOrder: OrderDetails;
-
-//Adding Default Data and creating list
-
-let SignInPage = () => {
-    let signinpage = document.getElementById("signin") as HTMLDivElement;
-    let signuppage = document.getElementById("signup") as HTMLDivElement;
-
-    signinpage.style.display = "block";
-    signuppage.style.display = "none";
+    if (!response.ok) {
+        throw new Error('Failed to fetch users');
+    }
+    return await response.json();
 }
 
-let SignUpPage = () => {
-    let signinpage = document.getElementById("signin") as HTMLDivElement;
-    let signuppage = document.getElementById("signup") as HTMLDivElement;
+async function fetchTravelDetails(): Promise<travelDetails[]> {
 
-    signinpage.style.display = "none";
-    signuppage.style.display = "block";
+    const apiurl = "http://localhost:5143/api/travelDetails";
+    const response = await fetch(apiurl);
 
+    if (!response.ok) {
+        throw new Error('Failed to fetch users');
+    }
+    return await response.json();
 }
 
-async function addUser(user: UserInfo): Promise<void> {
-    const response = await fetch('http://localhost:5151/api/UserInfo', {
+async function fetchTicketDetails(): Promise<ticketDetails[]> {
+
+    const apiurl = "http://localhost:5143/api/ticketDetails";
+    const response = await fetch(apiurl);
+
+    if (!response.ok) {
+        throw new Error('Failed to fetch users');
+    }
+    return await response.json();
+}
+
+//Add Data
+async function addPersonalDetails(personalDetail: personalDetails) {
+    const response = await fetch('http://localhost:5143/api/personalDetails', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(user)
+        body: JSON.stringify(personalDetail)
     }
     );
     if (!response.ok) {
-        throw new Error('Failed to add User');
+        throw new Error('Failed to add personal Detail');
     }
-
 }
 
-async function updateUser(id: number, user: UserInfo): Promise<void> {
-    const response = await fetch(`http://localhost:5151/api/UserInfo/${id}`, {
+async function addTravelDetails(travelDetail: travelDetails) {
+    const response = await fetch('http://localhost:5143/api/travelDetails', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(travelDetail)
+    }
+    );
+    if (!response.ok) {
+        throw new Error('Failed to fetch travel Detail');
+    }
+} 3
+
+async function addTicketDetails(ticketDetail: ticketDetails) {
+    const response = await fetch('http://localhost:5143/api/ticketDetails', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(ticketDetail)
+    }
+    );
+    if (!response.ok) {
+        throw new Error('Failed to ticket Detail');
+    }
+}
+//Update Data
+async function updatePersonalDetails(cardNumber: number, personalDetail: personalDetails) {
+    const response = await fetch(`http://localhost:5143/api/personalDetails/${cardNumber}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(user)
+        body: JSON.stringify(personalDetail)
     });
     if (!response.ok) {
         throw new Error('Failed to update User');
     }
 }
 
-async function fetchUsers(): Promise<UserInfo[]> {
-    const apiurl = 'http://localhost:5151/api/UserInfo';
-    const response = await fetch(apiurl);
+async function updateTicketDetails(ticketID: number, ticketDetail: ticketDetails) {
+    const response = await fetch(`http://localhost:5143/api/personalDetails/${ticketID}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(ticketDetail)
+    });
     if (!response.ok) {
-        throw new Error('Failed to fetch Users');
+        throw new Error('Failed to update User');
     }
-    return await response.json();
 }
 
-let newUserCreation = () => {
-    let name = document.getElementById("name") as HTMLInputElement;
-    let emailID = document.getElementById("emailID") as HTMLInputElement;
+async function updateTravelDetails(travelID: number, travelDetail: travelDetails) {
+    const response = await fetch(`http://localhost:5143/api/personalDetails/${travelID}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(travelDetail)
+    });
+    if (!response.ok) {
+        throw new Error('Failed to update User');
+    }
+}
+
+async function SignUpPage() {
+    let signup = document.getElementById("signup") as HTMLDivElement;
+    let signin = document.getElementById("signin") as HTMLDivElement;
+
+    signin.style.display = "none";
+    signup.style.display = "block";
+}
+
+async function SignInPage() {
+    let signup = document.getElementById("signup") as HTMLDivElement;
+    let signin = document.getElementById("signin") as HTMLDivElement;
+
+    signin.style.display = "block";
+    signup.style.display = "none";
+}
+
+async function newUserCreation() {
+    let userName = document.getElementById("userName") as HTMLInputElement;
+    let email = document.getElementById("email") as HTMLInputElement;
     let phone = document.getElementById("phone") as HTMLInputElement;
     let password = document.getElementById("password") as HTMLInputElement;
-    let confirmPassword = document.getElementById("confirmpassword") as HTMLInputElement;
 
-    //UserList.push(new UserInfo(name.value, emailID.value, phone.value, password.value));
-    const user:UserInfo={
-        userid :1,
-        userName :name.value,
-        userEmail :emailID.value,
-        phone :phone.value,
-        userPassword:password.value,
-        balance:0
+    const personalDetail: personalDetails = {
+        cardNumber: 0,
+        userName: userName.value,
+        email: email.value,
+        phone: phone.value,
+        password: password.value,
+        walletBalance: 0
     }
-    addUser(user);
+
+    addPersonalDetails(personalDetail);
+
     alert("Registeration Sucessfull");
+
     SignInPage();
 }
 
-async function existinguser() {
+async function existingUser() {
 
-    const UserList = await fetchUsers();
+    const personalDetailsList = await fetchPersonalDetails();
+
     let mail = document.getElementById("existingMailid") as HTMLInputElement;
     let password = document.getElementById("existingPassword") as HTMLInputElement;
-    let validuser = false;
-    UserList.forEach(user => {
-        if (user.userEmail == mail.value && user.userPassword == password.value) {
-            validuser = true;
-            currentUser = user;
+
+    let validUser = true;
+
+    personalDetailsList.forEach(personalDetail => {
+        if (personalDetail.email == mail.value && personalDetail.password == password.value) {
+            validUser = false;
+            currentUser = personalDetail;
             let form = document.getElementById("form") as HTMLDivElement;
             let afterlogin = document.getElementById("afterlogin") as HTMLDivElement;
             form.style.display = "none";
@@ -158,441 +223,125 @@ async function existinguser() {
         }
 
     });
-    if (!validuser) {
-        alert("Invalid user Name or Password");
-    }
-
-
 }
 
-let homePage = () => {
+async function homePage() {
+    form.style.display = "none";
     home.style.display = "block";
-    medicineTable.style.display = "none";
-    purchaseTable.style.display = "none";
-    showuserBalance.style.display = "none";
-    topupBalance.style.display = "none";
-    orderHistory.style.display = "none";
+    showBalance.style.display = "none";
+    topup.style.display = "none";
+    travelHistory.style.display = "none";
+    travel.style.display = "none";
 
     home.innerHTML = "Welcome " + currentUser.userName;
 }
 
-//Show Medicine List
-
-async function fetchMedicines(): Promise<MedicineInfo[]> {
-    const apiurl = 'http://localhost:5151/api/MedicineInfo';
-    const response = await fetch(apiurl);
-    if (!response.ok) {
-        throw new Error('Failed to fetch Medicine');
-    }
-    return await response.json();
-}
-
-
-async function renderMedicineTable() {
+async function balanceCheck() {
+    form.style.display = "none";
     home.style.display = "none";
-    medicineTable.style.display = "block";
-    purchaseTable.style.display = "none";
-    showuserBalance.style.display = "none";
-    topupBalance.style.display = "none";
-    orderHistory.style.display = "none";
-    cancel.style.display = "none";
+    showBalance.style.display = "block";
+    topup.style.display = "none";
+    travelHistory.style.display = "none";
+    travel.style.display = "none";
 
-    const MedicineList = await fetchMedicines()
-    let iterate = 0;
-    medicinetableBody.innerHTML = "";
-    MedicineList.forEach((item) => {
-        if (new Date(item.expireyDate) > new Date()) {
-            if (iterate++ == 0) {
-                medicinetableBody.innerHTML = `<tr>
-                    <td>${item.medicineName}</td>
-                    <td>${item.medicinePrice}</td>
-                    <td>${item.quantity}</td>
-                    <td>${item.expireyDate.split('T')[0].split('-').reverse().join('/')}</td>
-                    <td><button onclick = "return showeditMedicine('${item.medicineid}')" >Edit</button>
-                    <button onclick = "return deleteMedicine('${item.medicineid}')" >Delete</button>
-                    </td>
-                    </tr>`
-            }
-
-            else {
-                medicinetableBody.innerHTML += `<tr>
-                <td>${item.medicineName}</td>
-                <td>${item.medicinePrice}</td>
-                <td>${item.quantity}</td>
-                <td>${item.expireyDate.split('T')[0].split('-').reverse().join('/')}</td>
-                <td><button onclick = "showeditMedicine(${item.medicineid})" >Edit</button>
-                <button onclick = "deleteMedicine(${item.medicineid})" >Delete</button>
-                </td>
-                </tr>`
-            }
-
-        }
-
-    });
-
-};
-
-//Show Add Medicine
-
-let showaddMedicine = () => {
-    let getMedicine = document.getElementById("AddMedicine") as HTMLDivElement;
-    getMedicine.style.display = "block";
-
-    let editMedicine = document.getElementById("EditMedicine") as HTMLDivElement;
-    editMedicine.style.display = "none";
-
-};
-//Add Medicine 
-
-async function addMedicineAPI(medicine: MedicineInfo): Promise<void> {
-    const response = await fetch('http://localhost:5151/api/MedicineInfo', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(medicine)
-    }
-    );
-    if (!response.ok) {
-        throw new Error('Failed to add Medicine');
-    }
-    renderMedicineTable();
-}
-let addMedicine = () => {
-    let getMedicine = document.getElementById("AddMedicine") as HTMLDivElement;
-    getMedicine.style.display = "block";
-
-    let name = document.getElementById("MedcineName") as HTMLInputElement;
-    let price = document.getElementById("Price") as HTMLInputElement;
-    let quantity = document.getElementById("quantity") as HTMLInputElement;
-    let date = document.getElementById("ExpiryDate") as HTMLInputElement;
-
-   // MedicineList.push(new MedicineInfo(medicineName.value, parseInt(Price.value), parseInt(quantity.value), new Date(expireyDate.value)));
-
-   const medicine:MedicineInfo={
-    medicineid: 1,
-    medicineName: name.value,
-    medicinePrice: parseInt(price.value),
-    quantity: parseInt(quantity.value),
-    expireyDate: date.value,
-   }
-
-   addMedicineAPI(medicine);
-   
-
-    let form = document.getElementById("AddMedicineForm") as HTMLFormElement;
-    form.reset();
-    getMedicine.style.display = "none";
-    return false;
-};
-
-async function showeditMedicine(id: Number) {
-
-    let getMedicine = document.getElementById("AddMedicine") as HTMLDivElement;
-    getMedicine.style.display = "none";
-    const MedicineList = await fetchMedicines()
-    MedicineList.forEach((medicine) => {
-
-        if (medicine.medicineid == id) {
-            let editMedicine = document.getElementById("EditMedicine") as HTMLDivElement;
-            editMedicine.style.display = "block";
-
-            editMedicine.innerHTML += `<button onclick="return editMedicine('${medicine.medicineid}')">Submit</button>`
-
-
-            let medicineName = document.getElementById("EditMedcineName") as HTMLInputElement;
-            let Price = document.getElementById("EditPrice") as HTMLInputElement;
-            let quantity = document.getElementById("Editquantity") as HTMLInputElement;
-            let expireyDate = document.getElementById("ExpiryDate") as HTMLInputElement;
-
-            //var date = medicine.expireyDate.toISOString();
-
-            medicineName.value = medicine.medicineName;
-            Price.value = medicine.medicinePrice.toString();
-            quantity.value = medicine.quantity.toString();
-
-
-            //expireyDate.value = date.substring(0, 10);
-        }
-    })
+    showBalance.innerHTML = "Wallet Balance : " + currentUser.walletBalance;
 }
 
-async function updateMedicine(id: number, medicine: MedicineInfo): Promise<void> {
-    const response = await fetch(`http://localhost:5151/api/MedicineInfo/${id}`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(medicine)
-    });
-    if (!response.ok) {
-        throw new Error('Failed to update contact');
-    }
-    renderMedicineTable();
-}
-
-async function editMedicine(id: number) {
-
-    let medicineName = document.getElementById("EditMedcineName") as HTMLInputElement;
-    let Price = document.getElementById("EditPrice") as HTMLInputElement;
-    let quantity = document.getElementById("Editquantity") as HTMLInputElement;
-    let expireyDate = document.getElementById("ExpiryDate") as HTMLInputElement;
-
-    const MedicineList = await fetchMedicines()
-
-
-    const medicine: MedicineInfo = {
-        medicineid: selectedMedicine.medicineid,
-        medicineName: medicineName.value,
-        quantity: parseInt(quantity.value),
-        medicinePrice: parseInt(Price.value),
-        expireyDate: expireyDate.value
-    }
-
-    let editform = document.getElementById("EditMedicineForm") as HTMLFormElement;
-    editform.reset();
-    
-    updateMedicine(selectedMedicine.medicineid, medicine);
-
-}
-
-
-
-async function deleteMedcine(id: number): Promise<void> {
-    const response = await fetch(`http://localhost:5151/api/MedicineInfo/${id}`, {
-        method: 'DELETE'
-    });
-    if (!response.ok) {
-        throw new Error('Failed to delete Medicine');
-    }
-    renderMedicineTable();
-}
-
-
-
-
-async function purchaseMedicine() {
+async function recharge() {
+    form.style.display = "none";
     home.style.display = "none";
-    medicineTable.style.display = "none";
-    purchaseTable.style.display = "block";
-    showuserBalance.style.display = "none";
-    topupBalance.style.display = "none";
-    orderHistory.style.display = "none";
-    cancel.style.display = "none";
-    const MedicineList = await fetchMedicines()
-    let iterate = 0;
-    purchasetableBody.innerHTML = "";
-    MedicineList.forEach((item) => {
-        if (new Date(item.expireyDate) > new Date()) {
-            if (iterate++ == 0) {
-                purchasetableBody.innerHTML = `<tr>
-                    <td>${item.medicineName}</td>
-                    <td>${item.medicinePrice}</td>
-                    <td>${item.quantity}</td>
-                    <td>${item.expireyDate.split('T')[0].split('-').reverse().join('/')}</td>
-                    <td><button onclick = "return showBuyMedicine('${item.medicineid}')" >Buy</button><br>
-                    
-                    </td>
-                    </tr>`
-            }
-
-            else {
-                purchasetableBody.innerHTML += `<tr>
-                <td>${item.medicineName}</td>
-                <td>${item.medicinePrice}</td>
-                <td>${item.quantity}</td>
-                <td>${item.expireyDate.split('T')[0].split('-').reverse().join('/')}</td>
-                <td><button onclick = "return showBuyMedicine('${item.medicineid}')" >Buy</button>
-                </td>
-                </tr>`
-            }
-
-        }
-
-    });
-}
-
-async function showBuyMedicine(id: number) {
-
-    let buyMedicineform = document.getElementById("purchaseDetails") as HTMLDivElement;
-    buyMedicineform.style.display = "block";
-    const MedicineList = await fetchMedicines()
-    MedicineList.forEach(medicine => {
-        if (medicine.medicineid == id) {
-            selectedMedicine = medicine;
-        }
-    });
-    return false;
-}
-
-//Add order
-async function fetchOrders(): Promise<OrderDetails[]> {
-    const apiurl = 'http://localhost:5151/api/OrderDetails';
-    const response = await fetch(apiurl);
-    if (!response.ok) {
-        throw new Error('Failed to fetch Orders');
-    }
-    return await response.json();
-}
-
-async function addOrder(order: OrderDetails): Promise<void> {
-    const response = await fetch('http://localhost:5151/api/OrderDetails', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(order)
-    }
-    );
-    if (!response.ok) {
-        throw new Error('Failed to add Order');
-    }
-
-}
-
-// let buyMedicine = () => {
-//     let buyform = document.getElementById("purchaseform") as HTMLFormElement;
-//     let buyquantity = document.getElementById("Purchacequantity") as HTMLInputElement;
-
-//     if (parseInt(buyquantity.value) > selectedMedicine.quantity) {
-//         alert("Sorry the Selected quantity is unavailable");
-//     }
-//     else {
-//         let totalPrice = parseInt(buyquantity.value) * selectedMedicine.medicinePrice;
-//         if (totalPrice > currentUser.balance) {
-//             alert("Insufficaint Balance . ...Please Recharge");
-//         }
-//         else {
-//             selectedMedicine.quantity -= parseInt(buyquantity.value);
-//             currentUser.balance -= totalPrice;
-//             OrderList.push(new OrderDetails(selectedMedicine.medicineID, currentUser.userID, selectedMedicine.medicineName, parseInt(buyquantity.value), new Date(), totalPrice, "Ordered"));
-//             alert("Order Placed Sucessfully");
-//             purchaseMedicine();
-//         }
-//     }
-//     buyform.reset();
-//     return false;
-// }
-
-async function showcancelOrder() {
-    home.style.display = "none";
-    medicineTable.style.display = "none";
-    purchaseTable.style.display = "none";
-    showuserBalance.style.display = "none";
-    topupBalance.style.display = "none";
-    orderHistory.style.display = "none";
-    cancel.style.display = "block";
-
-    const OrderList = await fetchOrders()
-    let orderDetails = document.getElementById("cancelorderDetails") as HTMLTableElement;
-
-    orderDetails.innerHTML = "";
-
-    OrderList.forEach(order => {
-        if (order.userid == currentUser.userid && order.orderStatus == "Ordered") {
-
-            orderDetails.innerHTML += `<tr><td>${order.orderid}</td>
-                <td>${order.medicineName}</td>
-                <td>${order.quantity}</td> 
-                <td>${order.orderDate.split('T')[0].split('-').reverse().join('/')}</td>
-                <td>${order.orderStatus}</td>
-                <td><button onclick = "return cancelOrder('${order.orderid}')" >Cancel</button><br>`
-
-        }
-    });
-}
-
-async function cancelOrder(id: number) {
-
-
-    const MedicineList = await fetchMedicines();
-    const OrderList = await fetchOrders()
-    OrderList.forEach(order => {
-        if (order.orderid == id) {
-            order.orderStatus = "Cancelled";
-            currentUser.balance += order.totalPrice;
-            MedicineList.forEach(medicine => {
-                if (medicine.medicineid == order.medicineid) {
-                    medicine.quantity += order.quantity;
-                    alert("Sucessfully cancelled");
-
-                }
-            });
-        }
-    });
-    showcancelOrder();
-}
-
-let showtopup = () => {
-    home.style.display = "none";
-    medicineTable.style.display = "none";
-    purchaseTable.style.display = "none";
-    showuserBalance.style.display = "none";
-    orderHistory.style.display = "none";
-    cancel.style.display = "none";
-
-    topupBalance.style.display = "balance";
-
-
-    let topup = document.getElementById("topup") as HTMLDivElement;
+    showBalance.style.display = "none";
     topup.style.display = "block";
+    travelHistory.style.display = "none";
+    travel.style.display = "none";
 }
 
-let topup = () => {
+async function topupWallet() {
     let amount = document.getElementById("amount") as HTMLInputElement;
-    
 
+    currentUser.walletBalance += parseInt(amount.value);
+
+    updatePersonalDetails(currentUser.cardNumber, currentUser);
+
+    alert("Recharge Sucessfull");
     let topupform = document.getElementById("topupform") as HTMLFormElement;
     topupform.reset();
-    const user:UserInfo = {
-        userid: currentUser.userid,
-    userName: currentUser.userName,
-    userEmail: currentUser.userEmail,
-    userPassword: currentUser.userPassword,
-    phone: currentUser.phone,
-    balance: currentUser.balance += parseInt(amount.value)        
-    }
-    updateUser(currentUser.userid,user);
-    return false;
 }
 
-async function showOrderHistory() {
+async function showTravelHistory() {
 
+    form.style.display = "none";
     home.style.display = "none";
-    medicineTable.style.display = "none";
-    purchaseTable.style.display = "none";
-    showuserBalance.style.display = "none";
-    topupBalance.style.display = "none";
-    orderHistory.style.display = "block";
-    cancel.style.display = "none";
+    showBalance.style.display = "none";
+    topup.style.display = "none";
+    travelHistory.style.display = "block";
+    travel.style.display = "none";
 
-    const OrderList = await fetchOrders();
-    let orderDetails = document.getElementById("orderDetails") as HTMLTableElement;
-
-    orderDetails.innerHTML = "";
-
-    OrderList.forEach(order => {
-        if (order.userid == currentUser.userid) {
-
-            orderDetails.innerHTML += `<tr><td>${order.orderid}</td>
-                <td>${order.medicineName}</td>
-                <td>${order.quantity}</td> 
-                <td>${order.orderDate.split('T')[0].split('-').reverse().join('/')}</td>
-                <td>${order.orderStatus}</td>`
-
+    const travelDetailsList = await fetchTravelDetails();
+    let travelHistoryBody = document.getElementById("travelHistoryBody") as HTMLTableElement;
+    travelHistoryBody.innerHTML = "";
+    travelDetailsList.forEach(travelDetails => {
+        if (travelDetails.cardNumber == currentUser.cardNumber) {
+            travelHistoryBody.innerHTML += `<tr> <td> ${travelDetails.cardNumber}</td>
+                <td> ${travelDetails.fromLocation}</td>
+                <td> ${travelDetails.toLocation}</td>
+                <td> ${travelDetails.travelDate}</td>
+                <td> ${travelDetails.travelPrice}</td> </tr>`
         }
     });
-
 }
 
-let showBalance = () => {
+async function showTravel() {
+    form.style.display = "none";
     home.style.display = "none";
-    medicineTable.style.display = "none";
-    purchaseTable.style.display = "none";
-    showuserBalance.style.display = "block";
-    topupBalance.style.display = "none";
-    orderHistory.style.display = "none";
-    cancel.style.display = "none";
+    showBalance.style.display = "none";
+    topup.style.display = "none";
+    travelHistory.style.display = "none";
+    travel.style.display = "block";
 
-    showuserBalance.innerHTML = "Available Balance :" + currentUser.balance;
+    const ticketDetails = await fetchTicketDetails();
+    let travelBody = document.getElementById("travelBody") as HTMLTableElement;
+    travelBody.innerHTML = "";
+    ticketDetails.forEach(ticketDetails => {
+
+
+        travelBody.innerHTML += `<tr> <td> ${ticketDetails.ticketID}</td>
+                <td> ${ticketDetails.fromLocation}</td>
+                <td> ${ticketDetails.toLocation}</td>
+                <td> ${ticketDetails.ticketPrice}</td> 
+                <td> <button class = "addbutton" onclick = "bookTickets(${ticketDetails.ticketID})" >Book</button> </td></tr>`
+
+    });
+}
+
+async function bookTickets(id: number) {
+
+    const ticketDetail = await fetchTicketDetails();
+
+    ticketDetail.forEach(ticket => {
+        if (ticket.ticketID == id)
+            currentTicket = ticket;
+    });
+
+    if (currentUser.walletBalance < currentTicket.ticketPrice) {
+        alert("Insufficant Balance");
+    }
+    else {
+        currentUser.walletBalance -=currentTicket.ticketPrice;
+        updatePersonalDetails(currentUser.cardNumber, currentUser);
+
+        const travelDetail: travelDetails = {
+
+            travelID: 0,
+            cardNumber: currentUser.cardNumber,
+            fromLocation: currentTicket.fromLocation,
+            toLocation: currentTicket.toLocation,
+            travelDate: new Date().toISOString().split('T')[0],
+            travelPrice: currentTicket.ticketPrice
+            
+        }
+        alert("Ticket Booking Sucessfull");
+        addTravelDetails(travelDetail);
+    }
+
 }
