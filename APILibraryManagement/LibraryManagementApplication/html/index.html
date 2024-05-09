@@ -75,8 +75,8 @@
             <button class="addbutton" onclick="topupWallet()">Topup</button>
 
     </div>
-    <!-- Travel History  -->
-    <div class="travelHistory" id="travelHistory">
+    <!-- Borrow History  -->
+    <div class="travelHistory" id="borrowHistory">
 
         <table>
             <tr>
@@ -87,7 +87,7 @@
                 <th>Status</th>
                 <th>PaidFineAmount</th>
             </tr>
-            <tbody id="travelHistoryBody">
+            <tbody id="borrowHistoryBody">
 
             </tbody>
         </table>
@@ -117,20 +117,26 @@
 
 
     <!-- Purchace -->
-    <div class="travel" id="travel">
+    <div class="travel" id="borrow">
         <table>
             <tr>
-                <th>TravelID</th>
-                <th>From</th>
-                <th>To</th>
-                <th>Travel Date</th>
-                <th>Price</th>
+                <th>S no</th>
+                <th>Book Name</th>
+                <th>AuthorName</th>
+                <th>Book Count</th>
+                <th>Actions</th>
             </tr>
-            <tbody id="travelBody">
+            <tbody id="borrowBody">
 
             </tbody>
         </table>
+        <div id="borrowForm">
+            <br><br>
+            <input  class="borrowInput" id="borrowQuantity" placeholder="Enter the Quantity"> <br><br>
+            <button class="addbutton" onclick="borrowBook()">Confirm</button>
+        </div>
     </div>
+
 </body>
 <script src="../script/index.js"></script>
 
