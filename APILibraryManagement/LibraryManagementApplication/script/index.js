@@ -9,18 +9,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 let currentUser;
-let currentBook;
+let currentbook;
 let currentBorrow;
 let form = document.getElementById("form");
 let afterlogin = document.getElementById("afterlogin");
 let home = document.getElementById("home");
 let showBalance = document.getElementById("showBalance");
 let topup = document.getElementById("topup");
-let borrowHistory = document.getElementById("borrowHistory");
+let travelHistory = document.getElementById("travelHistory");
 let returnBook = document.getElementById("returnBook");
-let borrowForm = document.getElementById("borrowForm");
-borrowForm.style.display = "none";
-let borrow = document.getElementById("borrow");
+let travel = document.getElementById("travel");
 //Fetching
 function fetchUserDetails() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -81,7 +79,7 @@ function addBookDetails(bookDetail) {
         }
     });
 }
-function addBorrowDetails(borrowDetail) {
+function addBorrowrDetails(borrowDetail) {
     return __awaiter(this, void 0, void 0, function* () {
         const response = yield fetch('http://localhost:5238/api/borrowDetails', {
             method: 'POST',
@@ -201,8 +199,8 @@ function homePage() {
         home.style.display = "block";
         showBalance.style.display = "none";
         topup.style.display = "none";
-        borrow.style.display = "none";
-        borrow.style.display = "none";
+        travelHistory.style.display = "none";
+        travel.style.display = "none";
         returnBook.style.display = "none";
         home.innerHTML = "Welcome " + currentUser.userName;
     });
@@ -213,8 +211,8 @@ function recharge() {
         home.style.display = "none";
         showBalance.style.display = "none";
         topup.style.display = "block";
-        borrowHistory.style.display = "none";
-        borrow.style.display = "none";
+        travelHistory.style.display = "none";
+        travel.style.display = "none";
         returnBook.style.display = "none";
     });
 }
@@ -234,8 +232,8 @@ function showWalletBalance() {
         home.style.display = "none";
         showBalance.style.display = "block";
         topup.style.display = "none";
-        borrowHistory.style.display = "none";
-        borrow.style.display = "none";
+        travelHistory.style.display = "none";
+        travel.style.display = "none";
         returnBook.style.display = "none";
         showBalance.innerHTML = "Wallet Balance : " + currentUser.walletBalance;
     });
@@ -246,15 +244,15 @@ function showBorrowHistory() {
         home.style.display = "none";
         showBalance.style.display = "none";
         topup.style.display = "none";
-        borrowHistory.style.display = "block";
-        borrow.style.display = "none";
+        travelHistory.style.display = "block";
+        travel.style.display = "none";
         returnBook.style.display = "none";
         const borrowDetails = yield fetchBorrowDetails();
-        let borrowHistoryBody = document.getElementById("borrowHistoryBody");
-        borrowHistoryBody.innerHTML = "";
+        let travelHistoryBody = document.getElementById("travelHistoryBody");
+        travelHistoryBody.innerHTML = "";
         borrowDetails.forEach(borrowDetails => {
             if (borrowDetails.userID == currentUser.userID) {
-                borrowHistoryBody.innerHTML += `<tr> <td> ${borrowDetails.bookID}</td>
+                travelHistoryBody.innerHTML += `<tr> <td> ${borrowDetails.bookID}</td>
                 <td> ${borrowDetails.userID}</td>
                 <td> ${borrowDetails.borrowDate.split('T')[0]}</td>
                 <td> ${borrowDetails.borrowBookCount}</td>
@@ -270,8 +268,8 @@ function showReturn() {
         home.style.display = "none";
         showBalance.style.display = "none";
         topup.style.display = "none";
-        borrowHistory.style.display = "none";
-        borrow.style.display = "none";
+        travelHistory.style.display = "none";
+        travel.style.display = "none";
         returnBook.style.display = "block";
         const borrowDetails = yield fetchBorrowDetails();
         let returnBookBody = document.getElementById("returnBookBody");
@@ -305,80 +303,5 @@ function returnBooks(id) {
                 alert("Book returned Sucessfully");
             }
         });
-    });
-}
-function showBorrow() {
-    return __awaiter(this, void 0, void 0, function* () {
-        form.style.display = "none";
-        home.style.display = "none";
-        showBalance.style.display = "none";
-        topup.style.display = "none";
-        borrowHistory.style.display = "none";
-        borrow.style.display = "block";
-        returnBook.style.display = "none";
-        const bookDetails = yield fetchBookDetails();
-        let returnBookBody = document.getElementById("borrowBody");
-        returnBookBody.innerHTML = "";
-        let sNo = 0;
-        bookDetails.forEach(bookDetail => {
-            returnBookBody.innerHTML += `<tr> <td> ${++sNo}</td>
-                <td> ${bookDetail.bookName}</td>
-                <td> ${bookDetail.authorName}</td>
-                <td> ${bookDetail.bookCount}</td>
-                <td> <button class = "addbutton" onclick = "showBorrowForm(${bookDetail.bookID})" >Borrow</button> </td></tr>`;
-        });
-    });
-}
-function showBorrowForm(id) {
-    return __awaiter(this, void 0, void 0, function* () {
-        form.style.display = "none";
-        home.style.display = "none";
-        showBalance.style.display = "none";
-        topup.style.display = "none";
-        borrowHistory.style.display = "none";
-        borrow.style.display = "block";
-        returnBook.style.display = "none";
-        borrowForm.style.display = "block";
-        const bookDetailList = yield fetchBookDetails();
-        bookDetailList.forEach(bookDetail => {
-            if (bookDetail.bookID == id) {
-                currentBook = bookDetail;
-            }
-        });
-    });
-}
-function borrowBook() {
-    return __awaiter(this, void 0, void 0, function* () {
-        let quantity = document.getElementById("borrowQuantity");
-        if (currentBook.bookCount < parseInt(quantity.value)) {
-            alert("Selected Count is unavailable");
-        }
-        else {
-            let userBorrowBookCount = 0;
-            const borrowDetailList = yield fetchBorrowDetails();
-            borrowDetailList.forEach(borrowDetail => {
-                if (borrowDetail.userID == currentUser.userID && borrowDetail.status == "Borrowed") {
-                    ++userBorrowBookCount;
-                }
-            });
-            if (userBorrowBookCount >= 3) {
-                alert("You have already borrowed 3 books please to return to Continue");
-            }
-            else {
-                const borrowDetail = {
-                    borrowID: 0,
-                    bookID: currentBook.bookID,
-                    userID: currentUser.userID,
-                    borrowDate: new Date().toISOString(),
-                    borrowBookCount: parseInt(quantity.value),
-                    status: "Borrowed",
-                    paidFineAmount: 0
-                };
-                currentBook.bookCount -= parseInt(quantity.value);
-                updateBookDetails(currentBook.bookID, currentBook);
-                addBorrowDetails(borrowDetail);
-                alert("Borrowed Sucessfully");
-            }
-        }
     });
 }

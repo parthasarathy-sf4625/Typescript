@@ -26,7 +26,7 @@ interface borrowDetails {
 }
 
 let currentUser: userDetails;
-let currentBook: bookDetails;
+let currentbook: bookDetails;
 let currentBorrow: borrowDetails;
 
 
@@ -40,13 +40,12 @@ let showBalance = document.getElementById("showBalance") as HTMLDivElement;
 
 let topup = document.getElementById("topup") as HTMLTableElement;
 
-let borrowHistory = document.getElementById("borrowHistory") as HTMLDivElement;
+let travelHistory = document.getElementById("travelHistory") as HTMLDivElement;
 
 let returnBook = document.getElementById("returnBook") as HTMLDivElement;
 
-let borrowForm = document.getElementById("borrowForm") as HTMLDivElement;
-borrowForm.style.display ="none";
-let borrow = document.getElementById("borrow") as HTMLDivElement;
+
+let travel = document.getElementById("travel") as HTMLDivElement;
 
 //Fetching
 
@@ -114,7 +113,7 @@ async function addBookDetails(bookDetail: bookDetails) {
     }
 }
 
-async function addBorrowDetails(borrowDetail: borrowDetails) {
+async function addBorrowrDetails(borrowDetail: bookDetails) {
     const response = await fetch('http://localhost:5238/api/borrowDetails', {
         method: 'POST',
         headers: {
@@ -191,7 +190,6 @@ async function newUserCreation() {
     let phone = document.getElementById("phone") as HTMLInputElement;
     let password = document.getElementById("password") as HTMLInputElement;
     let department = document.getElementById("department") as HTMLInputElement;
-    
 
     const userDetail: userDetails = {
         userID: 0,
@@ -238,8 +236,8 @@ async function homePage() {
     home.style.display = "block";
     showBalance.style.display = "none";
     topup.style.display = "none";
-    borrow.style.display = "none";
-    borrow.style.display = "none";
+    travelHistory.style.display = "none";
+    travel.style.display = "none";
     returnBook.style.display = "none";
 
     home.innerHTML = "Welcome " + currentUser.userName;
@@ -250,8 +248,8 @@ async function recharge() {
     home.style.display = "none";
     showBalance.style.display = "none";
     topup.style.display = "block";
-    borrowHistory.style.display = "none";
-    borrow.style.display = "none";
+    travelHistory.style.display = "none";
+    travel.style.display = "none";
     returnBook.style.display = "none";
 }
 
@@ -273,8 +271,8 @@ async function showWalletBalance() {
     home.style.display = "none";
     showBalance.style.display = "block";
     topup.style.display = "none";
-    borrowHistory.style.display = "none";
-    borrow.style.display = "none";
+    travelHistory.style.display = "none";
+    travel.style.display = "none";
     returnBook.style.display = "none";
 
     showBalance.innerHTML = "Wallet Balance : " + currentUser.walletBalance;
@@ -286,16 +284,16 @@ async function showBorrowHistory() {
     home.style.display = "none";
     showBalance.style.display = "none";
     topup.style.display = "none";
-    borrowHistory.style.display = "block";
-    borrow.style.display = "none";
+    travelHistory.style.display = "block";
+    travel.style.display = "none";
     returnBook.style.display = "none";
 
     const borrowDetails = await fetchBorrowDetails();
-    let borrowHistoryBody = document.getElementById("borrowHistoryBody") as HTMLTableElement;
-    borrowHistoryBody.innerHTML = "";
+    let travelHistoryBody = document.getElementById("travelHistoryBody") as HTMLTableElement;
+    travelHistoryBody.innerHTML = "";
     borrowDetails.forEach(borrowDetails => {
         if (borrowDetails.userID == currentUser.userID) {
-            borrowHistoryBody.innerHTML += `<tr> <td> ${borrowDetails.bookID}</td>
+            travelHistoryBody.innerHTML += `<tr> <td> ${borrowDetails.bookID}</td>
                 <td> ${borrowDetails.userID}</td>
                 <td> ${borrowDetails.borrowDate.split('T')[0]}</td>
                 <td> ${borrowDetails.borrowBookCount}</td>
@@ -311,8 +309,8 @@ async function showReturn() {
     home.style.display = "none";
     showBalance.style.display = "none";
     topup.style.display = "none";
-    borrowHistory.style.display = "none";
-    borrow.style.display = "none";
+    travelHistory.style.display = "none";
+    travel.style.display = "none";
     returnBook.style.display = "block";
 
     const borrowDetails = await fetchBorrowDetails();
@@ -351,82 +349,4 @@ async function returnBooks(id: number) {
         }
     });
 
-}
-
-async function showBorrow() {
-    form.style.display = "none";
-    home.style.display = "none";
-    showBalance.style.display = "none";
-    topup.style.display = "none";
-    borrowHistory.style.display = "none";
-    borrow.style.display = "block";
-    returnBook.style.display = "none";  
-    
-    const bookDetails = await fetchBookDetails();
-    let returnBookBody = document.getElementById("borrowBody") as HTMLTableElement;
-    returnBookBody.innerHTML = "";
-    let sNo=0;
-    bookDetails.forEach(bookDetail => {
-            returnBookBody.innerHTML += `<tr> <td> ${++sNo}</td>
-                <td> ${bookDetail.bookName}</td>
-                <td> ${bookDetail.authorName}</td>
-                <td> ${bookDetail.bookCount}</td>
-                <td> <button class = "addbutton" onclick = "showBorrowForm(${bookDetail.bookID})" >Borrow</button> </td></tr>`
-        
-    });
-}
-
-async function showBorrowForm(id:number) {
-    form.style.display = "none";
-    home.style.display = "none";
-    showBalance.style.display = "none";
-    topup.style.display = "none";
-    borrowHistory.style.display = "none";
-    borrow.style.display = "block";
-    returnBook.style.display = "none";
-    borrowForm.style.display ="block"; 
-
-    const bookDetailList = await fetchBookDetails();
-
-    bookDetailList.forEach(bookDetail => {
-        if(bookDetail.bookID == id){
-            currentBook=bookDetail;
-        }        
-    });
-}
-
-async function borrowBook() {
-    
-    let quantity = document.getElementById("borrowQuantity") as HTMLInputElement;
-    
-    if(currentBook.bookCount < parseInt(quantity.value)){
-        alert("Selected Count is unavailable");
-    }
-    else{
-        let userBorrowBookCount=0;
-        const borrowDetailList= await fetchBorrowDetails();
-        borrowDetailList.forEach(borrowDetail => {
-            if(borrowDetail.userID == currentUser.userID && borrowDetail.status == "Borrowed"){
-                ++userBorrowBookCount;
-            }
-        });
-        if(userBorrowBookCount>=3){
-            alert("You have already borrowed 3 books please to return to Continue");
-        }
-        else{
-            const borrowDetail:borrowDetails={
-                borrowID:0,
-                bookID:currentBook.bookID,
-                userID:currentUser.userID,
-                borrowDate:new Date().toISOString(),
-                borrowBookCount:parseInt(quantity.value),
-                status:"Borrowed",
-                paidFineAmount:0
-            }
-            currentBook.bookCount-=parseInt(quantity.value)
-            updateBookDetails(currentBook.bookID,currentBook);
-            addBorrowDetails(borrowDetail);
-            alert("Borrowed Sucessfully");
-        }
-    }
 }

@@ -108,7 +108,7 @@ async function addTravelDetails(travelDetail: travelDetails) {
     if (!response.ok) {
         throw new Error('Failed to fetch travel Detail');
     }
-} 3
+} 
 
 async function addTicketDetails(ticketDetail: ticketDetails) {
     const response = await fetch('http://localhost:5143/api/ticketDetails', {
