@@ -1,0 +1,152 @@
+* {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.loginForm {
+    display: block;
+    margin: 10% 36%;
+    background-color: rgba(51, 255, 0, 0.177);
+    border: 1px solid black;
+    height: 60%;
+}
+
+.loginButtonsRow {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+}
+
+.loginButton {
+    width: 50%;
+    background-color: black;
+    padding: 3% 0%;
+    color: white;
+}
+
+.signup {
+    display: block;
+    width: 100%;
+    margin: 10% 15%;
+}
+
+.signin {
+    display: none;
+    width: 100%;
+    margin: 10% 15%;
+}
+
+.loginInputBox {
+    width: 70%;
+    height: 8%;
+}
+
+.signinbutton {
+    background-color: black;
+    padding: 3% 5%;
+    color: white;
+}
+
+.afterlogin {
+    display: none;
+    justify-content: left;
+}
+.afterloginrow{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.afterloginbuttons {
+    padding: 1% 5%;
+    background-color: black;
+    font-size: 120%;
+    width: 50%;
+    color: white;
+    width: auto;
+}
+
+.Logout{
+
+    margin-left: 3%;
+    padding: 1% 5%;
+    background-color: black;
+    font-size: 140%;
+    width: 50%;
+    color: white;
+    width: auto;
+
+}
+
+.topup{
+    display: none;
+    width: 150%;
+    margin: 10% 30%;
+}
+.inputtopup{
+    font-size: 110%;
+    width: 40%;
+    height: 5%;
+}
+
+.home,.showBalance{
+    margin: 10%;
+    display: none;
+    font-size: 400%;
+    font-weight: bolder;
+    font-style: italic;
+    text-align: center;
+}
+
+.addbutton{
+    padding:  0% 1%;
+    background-color: black;
+    font-size: 110%;
+    margin: 1%;
+    color: white;
+    width: auto;
+}
+
+table{
+    border: 1px solid black;
+    border-collapse: collapse;
+    width: 100%;
+}
+td,th{
+
+    border: 1px solid black;
+    border-collapse: collapse;
+    width: 50%;
+
+}
+
+#sno{
+    border: 1px solid black;
+    border-collapse: collapse;
+    width: 1%;
+}
+
+#pName{
+    border: 1px solid black;
+    border-collapse: collapse;
+    width: 5%;
+}
+.viewProducts,.buyProducts{
+    display: none;
+    padding: 10% 20%;
+}
+
+.orderHistory{
+    display: none;
+    padding: 10% 30%;
+}
+
+.productsTable {
+    width: 100%;
+}
+
+.userProfilePicUpload{
+    padding: 2%;
+    background-color: chocolate;
+    color: white;
+}

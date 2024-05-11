@@ -1,0 +1,238 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="../css/index.css">
+</head>
+<title>
+    Grocery Store Application
+</title>
+
+<body>
+
+    <div class="loginForm" id="loginForm">
+
+        <div class="loginButtonsRow">
+
+            <button onclick="signUp()" class="loginButton"> Sign Up </button>
+            <button onclick="signIn()" class="loginButton"> Sign In </button>
+
+        </div>
+
+        <div class="signup" id="signup">
+            <form action="" id="signUpForm">
+                <input class="loginInputBox" type="text" id="userName" name="userName" placeholder="Enter Your Name">
+                <br><br>
+                <input class="loginInputBox" type="text" name="email" id="email" placeholder="Enter Your Email">
+                <br><br>
+                <input class="loginInputBox" type="password" name="password" id="password" placeholder="Password">
+                <br><br>
+                <input class="loginInputBox" type="password" name="confirmpassword" id="confirmpassword"
+                    placeholder="Confirm password"><br><br>
+                <label class="userProfilePicUpload" for="userProfilePic" required>Upload Profile pic</label>
+                <input style="display: none;" type="file" name="userProfilePic" id="userProfilePic"><br><br><br>
+                <input type="submit" class="userProfilePicUpload" value="Sign Up">
+            </form>
+        </div>
+
+        <div class="signin" id="signin">
+
+            <input class="loginInputBox" type="text" name="email" id="oldEmail" placeholder="Enter Your Email">
+            <br><br>
+            <input class="loginInputBox" type="password" name="password" id="oldPassword" placeholder="Password">
+            <br><br>
+            <button type="submit" class="userProfilePicUpload" onclick="exsistingUser()" value="Sign In">Sign in </button>
+
+            </form>
+
+
+        </div>
+    </div>
+
+    <div class="afterlogin" id="afterlogin">
+
+        <div class="afterloginrow">
+
+            <button class="afterloginbuttons" onclick="homePage()">Home</button>
+            <button class="afterloginbuttons" onclick="renderProductTable()">View Products</button>
+            <button class="afterloginbuttons" onclick="renderBuyTable()">Buy Grocery</button>
+            <button class="afterloginbuttons" onclick="showOrderHistory()">Order History </button>
+            <button class="afterloginbuttons" onclick="viewBalance()">Balance </button>
+            <button class="afterloginbuttons" onclick="showTopup()">Topup </button>
+            <button class="afterloginbuttons" onclick="showCart()">Cart </button>
+
+            <form style="padding-left: 3%;">
+                <button class="Logout" onclick="" type="submit">Logout</button><br>
+                <img id="profileImg" src="" alt="" width="50%" style="border-radius: 100%;">
+            </form>
+        </div>
+
+    </div>
+
+    <div class="home" id="home">
+
+        <img class="profilepic" id="profilePic" src="" alt="profilepic" width="10%">
+
+    </div>
+
+    <div class="viewProducts" id="viewProducts">
+
+        <button class="userProfilePicUpload" onclick="showAddForm()">Add Product</button><br><br><br>
+
+        <div class="addProduct" id="addProduct">
+
+            <form class="signup" action="" id="addFormID">
+                <input class="loginInputBox" type="text" name="addProductName" id="addProductName"
+                    placeholder="Enter the Product Name"><br><br>
+                <input class="loginInputBox" type="text" name="addProductQuantity" id="addProductQuantity"
+                    placeholder="Enter the Quantity"><br><br>
+                <input class="loginInputBox" type="text" name="addProductPrice" id="addProductPrice"
+                    placeholder="Enter the product Price"> <br><br>
+
+                <input class="loginInputBox" type="date" name="addProductPurchaseDate"
+                    id="addProductPurchaseDate" value="Purchase Date">
+                    <label class="userProfilePicUpload" for="addProductPurchaseDate" >Purchase Date</label><br><br><br>
+
+                <input class="loginInputBox" type="date" name="addProductExpiryDate" id="addProductExpiryDate" placeholder="Expiry Date"> 
+                <label class="userProfilePicUpload" for="addProductExpiryDate" >Expiry Date</label><br><br><br>
+
+                <label class="userProfilePicUpload" for="addProductPic" >Upload Product pic</label>
+                <input style="display: none;" type="file" name="addProductPic" id="addProductPic"><br><br><br><br>
+
+                <input type="submit" class="userProfilePicUpload" value="Add Product">
+            </form>
+        </div>
+
+
+        <table class="productsTable" id="productsTable">
+
+            <tr>
+                <th id="sno">
+                    S.no
+                </th>
+                <th >
+                    Product Picture
+                </th>
+                <th id="pName">
+                    Product Name
+                </th>
+                <th>
+                    Available Stock
+                </th>
+                <th>
+                    Price
+                </th>
+                <th>
+                    Purchase Date
+                </th>
+                <th>
+                    Expiry Date
+                </th>
+                <th>
+                    Actions
+                </th>
+
+            </tr>
+            <tbody id="productsTableBody">
+
+            </tbody>
+
+
+        </table>
+
+    </div>
+
+    <div class="buyProducts" id="buyProducts">
+
+        <div class="signUp" id="askQuantity">
+            <label for="productQuantity" id="selectedProduct"></label><br>
+
+            <input class="loginInputBox" type="number" name="productQuantity" id="productQuantity" placeholder="Enter the Quantity">
+            <button class="userProfilePicUpload" onclick="addCart()">Confirm</button>
+        </div>
+
+        <table class="productsTable" id="buyProductsTable">
+
+            <tr>
+                <th>
+                    S.no
+                </th>
+                <th>
+                    Product Picture
+                </th>
+                <th>
+                    Product Name
+                </th>
+                <th>
+                    Available Stock
+                </th>
+                <th>
+                    Price
+                </th>
+                <th>
+                    Actions
+                </th>
+
+                <tbody id="buyProductsBody">
+
+                </tbody>
+
+            </tr>
+
+
+        </table>
+
+
+    </div>
+
+    <div class="showBalance" id="showBalance">
+
+    </div>
+
+    <div class="topup" id="topup">
+        <h1>Enter The Amount to top up</h1>
+        <form id="topupform">
+            <input class="inputtopup" type="number" name="amount" id="amount" placeholder="Enter the amount to Topup">
+        </form>
+        <button class="addbutton" onclick="topupWallet()">Topup</button>
+
+    </div>
+    <div class="viewProducts" id="cart">
+        <table class="productsTable" id="cartTable">
+            <tr>
+                <th>
+                    S.no
+                </th>
+                <th>
+                    Product Name
+                </th>
+                <th>
+                    Quantity
+                </th>
+                <th>
+                    Price
+                </th>
+                <th>
+                    Total Price
+                </th>
+
+            </tr>
+            <tbody id="cartTableBody">
+
+            </tbody>
+        </table>
+
+        <button class="addbutton" onclick="confirmOrder()"> Confirm Purchase </button>
+    </div>
+
+    <div class="orderHistory" id="orderHistory">
+
+        <div id="orderHistoryTable">
+
+        </div>
+
+    </div>
+
+</body>
+<script src="../script/index.js"></script>
+
+</html>
